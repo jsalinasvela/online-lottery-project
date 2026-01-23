@@ -17,14 +17,40 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-            Win Big Today!
-          </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Join the excitement and purchase your tickets for a chance to win the grand prize
-          </p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 max-w-2xl mx-auto">
+          {/* Players Card */}
+          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center">
+            <div className="flex justify-center mb-3">
+              <svg className="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div className="text-4xl font-bold text-white mb-1">87</div>
+            <div className="text-sm text-slate-400">Players</div>
+          </div>
+
+          {/* Time Left Card */}
+          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center">
+            <div className="flex justify-center mb-3">
+              <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="text-4xl font-bold text-white mb-1">48h</div>
+            <div className="text-sm text-slate-400">Time Left</div>
+          </div>
+
+          {/* Recent Activity Card */}
+          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center">
+            <div className="flex justify-center mb-3">
+              <svg className="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div className="text-4xl font-bold text-white mb-1">0</div>
+            <div className="text-sm text-slate-400">Recent</div>
+          </div>
         </div>
 
         {/* Active Raffle Card - Placeholder */}
