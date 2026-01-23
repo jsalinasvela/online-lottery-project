@@ -70,53 +70,59 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Two Column Layout */}
           <div className="p-6 sm:p-8">
-            {/* Glass Visualization */}
-            <div className="mb-8 py-8">
-              <GlassVisualization
-                currentAmount={2450}
-                goalAmount={10000}
-                ticketsSold={490}
-              />
-            </div>
-
-            {/* Ticket Purchase Section - Placeholder */}
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-6">
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                Purchase Tickets
-              </h4>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                    Quantity
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    defaultValue="1"
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
-                  />
-                </div>
-                <div className="flex-1 flex flex-col justify-end">
-                  <div className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-                    Total: <span className="text-lg font-bold text-slate-900 dark:text-slate-100">$10.00</span>
-                  </div>
-                  <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
-                    Buy Tickets
-                  </button>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Left Column - Glass Visualization */}
+              <div className="flex items-center justify-center py-8">
+                <GlassVisualization
+                  currentAmount={2450}
+                  goalAmount={10000}
+                  ticketsSold={490}
+                />
               </div>
-            </div>
 
-            {/* My Tickets - Placeholder */}
-            <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                My Tickets
-              </h4>
-              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4 text-center">
-                <p className="text-slate-500 dark:text-slate-400">
-                  You haven&apos;t purchased any tickets yet
-                </p>
+              {/* Right Column - Ticket Purchase & My Tickets */}
+              <div className="flex flex-col justify-center space-y-8">
+                {/* Ticket Purchase Section */}
+                <div>
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+                    Purchase Tickets
+                  </h4>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Quantity
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        defaultValue="1"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+                      />
+                    </div>
+                    <div className="flex-1 flex flex-col justify-end">
+                      <div className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                        Total: <span className="text-lg font-bold text-slate-900 dark:text-slate-100">$10.00</span>
+                      </div>
+                      <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                        Buy Tickets
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* My Tickets Section */}
+                <div>
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                    My Tickets
+                  </h4>
+                  <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4 text-center">
+                    <p className="text-slate-500 dark:text-slate-400">
+                      You haven&apos;t purchased any tickets yet
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
