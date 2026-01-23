@@ -318,36 +318,62 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-            <div className="text-3xl mb-3">🎯</div>
-            <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              How It Works
-            </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Purchase tickets and watch the prize pool grow. When the goal is reached, a winner is automatically selected!
-            </p>
+        {/* How It Works - Single Consolidated Card */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div className="bg-gradient-to-r from-purple-600 to-purple-400 p-4 sm:p-6 text-white">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🎯</span>
+              <h3 className="text-xl font-bold">How It Works</h3>
+            </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-            <div className="text-3xl mb-3">💰</div>
-            <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              Fair & Transparent
-            </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Every ticket has an equal chance. Winners are selected using a cryptographically secure random process.
-            </p>
-          </div>
+          <div className="p-6 sm:p-8">
+            <div className="space-y-6">
+              {/* Step 1 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold text-sm">1</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
+                    Purchase Your Tickets
+                  </h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Choose from our ticket packages and join the draw. Watch the prize pool grow in real-time as more players participate.
+                  </p>
+                </div>
+              </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-            <div className="text-3xl mb-3">🏆</div>
-            <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              Instant Payout
-            </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Winners receive their prize immediately. Check the history to see past winners and raffles.
-            </p>
+              {/* Step 2 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold text-sm">2</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
+                    Fair & Transparent Selection
+                  </h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Every ticket has an equal chance to win. When the goal is reached, a winner is automatically selected using a cryptographically secure random process.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold text-sm">3</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
+                    Instant Payout
+                  </h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Winners receive their prize immediately after the draw. Check the history section to see past winners and completed raffles.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
