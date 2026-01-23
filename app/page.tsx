@@ -1,3 +1,5 @@
+import GlassVisualization from '@/components/raffle/GlassVisualization';
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-slate-100 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900">
@@ -69,34 +71,13 @@ export default function Home() {
           </div>
 
           <div className="p-6 sm:p-8">
-            {/* Prize Pool Display - Placeholder */}
-            <div className="mb-8">
-              <div className="flex justify-between items-baseline mb-3">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  Current Prize Pool
-                </span>
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  Goal: $1,000
-                </span>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="relative">
-                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full transition-all duration-500"
-                    style={{ width: '65%' }}
-                  ></div>
-                </div>
-                <div className="mt-2 text-center">
-                  <span className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                    $650.00
-                  </span>
-                  <span className="text-slate-500 dark:text-slate-400 ml-2">
-                    / $1,000.00
-                  </span>
-                </div>
-              </div>
+            {/* Glass Visualization */}
+            <div className="mb-8 py-8">
+              <GlassVisualization
+                currentAmount={2450}
+                goalAmount={10000}
+                ticketsSold={490}
+              />
             </div>
 
             {/* Ticket Purchase Section - Placeholder */}
