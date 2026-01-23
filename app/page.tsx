@@ -190,6 +190,134 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Recent Activity Section */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-purple-600 to-purple-400 p-4 sm:p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                <h3 className="text-xl font-bold">Recent Activity</h3>
+              </div>
+              <span className="text-sm text-purple-100">Live</span>
+            </div>
+          </div>
+
+          <div className="p-4 sm:p-6">
+            {/* Scrollable Activity Feed */}
+            <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
+              {/* Activity Item 1 */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/70 transition-colors">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                  JD
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-bold">John D.</span> purchased <span className="text-purple-600 dark:text-purple-400 font-semibold">5 tickets</span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">2 minutes ago</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
+                    $20
+                  </span>
+                </div>
+              </div>
+
+              {/* Activity Item 2 */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/70 transition-colors">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+                  SM
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-bold">Sarah M.</span> purchased <span className="text-purple-600 dark:text-purple-400 font-semibold">10 tickets</span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">5 minutes ago</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
+                    $35
+                  </span>
+                </div>
+              </div>
+
+              {/* Activity Item 3 */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/70 transition-colors">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white font-bold text-sm">
+                  MK
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-bold">Mike K.</span> purchased <span className="text-purple-600 dark:text-purple-400 font-semibold">1 ticket</span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">8 minutes ago</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
+                    $5
+                  </span>
+                </div>
+              </div>
+
+              {/* Activity Item 4 */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/70 transition-colors">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-bold text-sm">
+                  AL
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-bold">Alex L.</span> purchased <span className="text-purple-600 dark:text-purple-400 font-semibold">25 tickets</span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">12 minutes ago</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
+                    $75
+                  </span>
+                </div>
+              </div>
+
+              {/* Activity Item 5 */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/70 transition-colors">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">
+                  EW
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-bold">Emma W.</span> purchased <span className="text-purple-600 dark:text-purple-400 font-semibold">5 tickets</span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">15 minutes ago</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
+                    $20
+                  </span>
+                </div>
+              </div>
+
+              {/* Activity Item 6 */}
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/70 transition-colors">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                  RC
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                    <span className="font-bold">Ryan C.</span> purchased <span className="text-purple-600 dark:text-purple-400 font-semibold">10 tickets</span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">18 minutes ago</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
+                    $35
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
