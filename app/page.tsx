@@ -5,13 +5,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-slate-100 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900">
       {/* Header */}
       <header className="border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3">
             <span className="bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
               🏆 Lucky Draw ✨
             </span>
           </h1>
-          <p className="text-lg text-slate-400">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
             Watch the prize pool grow in real-time! 🚀
           </p>
         </div>
@@ -20,38 +20,38 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 max-w-3xl mx-auto">
           {/* Players Card */}
-          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center">
+          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center hover:bg-slate-800/60 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer group">
             <div className="flex justify-center mb-3">
-              <svg className="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-purple-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">87</div>
-            <div className="text-sm text-slate-400">Players</div>
+            <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Players</div>
           </div>
 
           {/* Time Left Card */}
-          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center">
+          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center hover:bg-slate-800/60 hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 cursor-pointer group">
             <div className="flex justify-center mb-3">
-              <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-green-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">48h</div>
-            <div className="text-sm text-slate-400">Time Left</div>
+            <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Time Left</div>
           </div>
 
-          {/* Recent Activity Card */}
-          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center">
+          {/* Entries Card */}
+          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center hover:bg-slate-800/60 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer group">
             <div className="flex justify-center mb-3">
-              <svg className="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              <svg className="w-8 h-8 text-pink-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
               </svg>
             </div>
-            <div className="text-4xl font-bold text-white mb-1">0</div>
-            <div className="text-sm text-slate-400">Recent</div>
+            <div className="text-4xl font-bold text-white mb-1">490</div>
+            <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Entries</div>
           </div>
         </div>
 
@@ -179,9 +179,17 @@ export default function Home() {
                   <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
                     My Tickets
                   </h4>
-                  <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4 text-center">
-                    <p className="text-slate-500 dark:text-slate-400">
+                  <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-6 text-center border-2 border-dashed border-slate-200 dark:border-slate-700">
+                    <div className="flex justify-center mb-3">
+                      <svg className="w-12 h-12 text-slate-400 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                      </svg>
+                    </div>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">
                       You haven&apos;t purchased any tickets yet
+                    </p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
+                      Select a package above to get started
                     </p>
                   </div>
                 </div>
@@ -379,10 +387,15 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
+      <footer className="mt-16 border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-            <p>© 2025 Online Lottery. All rights reserved.</p>
+          <div className="text-center">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+              © 2025 Online Lottery. All rights reserved.
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-500">
+              Play responsibly. Must be 18+ to participate.
+            </p>
           </div>
         </div>
       </footer>
