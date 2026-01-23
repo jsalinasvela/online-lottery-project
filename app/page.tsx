@@ -3,27 +3,15 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-slate-100 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900">
       {/* Header */}
       <header className="border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-400 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">🎫</span>
-              </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
-                Online Lottery
-              </h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                <span className="text-sm font-medium text-purple-900 dark:text-purple-100">
-                  Wallet:
-                </span>
-                <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
-                  $500.00
-                </span>
-              </div>
-            </div>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+              🏆 Lucky Draw ✨
+            </span>
+          </h1>
+          <p className="text-lg text-slate-400">
+            Watch the prize pool grow in real-time! 🚀
+          </p>
         </div>
       </header>
 
