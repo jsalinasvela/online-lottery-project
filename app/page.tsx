@@ -87,28 +87,90 @@ export default function Home() {
                 {/* Ticket Purchase Section */}
                 <div>
                   <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                    Purchase Tickets
+                    Choose Your Package
                   </h4>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Quantity
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        defaultValue="1"
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
-                      />
-                    </div>
-                    <div className="flex-1 flex flex-col justify-end">
-                      <div className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-                        Total: <span className="text-lg font-bold text-slate-900 dark:text-slate-100">$10.00</span>
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Package 1: 1 ticket / $5 */}
+                    <button className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">
+                        1
                       </div>
-                      <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
-                        Buy Tickets
-                      </button>
-                    </div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                        ticket
+                      </div>
+                      <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        $5
+                      </div>
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
+                          Select
+                        </span>
+                      </div>
+                    </button>
+
+                    {/* Package 2: 5 tickets / $20 - HOT */}
+                    <button className="relative bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-2 border-orange-400 dark:border-orange-500 rounded-xl p-4 hover:border-orange-500 hover:shadow-lg transition-all duration-200 text-left group">
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg flex items-center gap-1">
+                        <span>🔥</span>
+                        <span>HOT</span>
+                      </div>
+                      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">
+                        5
+                      </div>
+                      <div className="text-xs text-slate-600 dark:text-slate-300 mb-2">
+                        tickets
+                      </div>
+                      <div className="text-lg font-bold text-orange-600 dark:text-orange-400">
+                        $20
+                      </div>
+                      <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-full">
+                          Select
+                        </span>
+                      </div>
+                    </button>
+
+                    {/* Package 3: 10 tickets / $35 */}
+                    <button className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">
+                        10
+                      </div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                        tickets
+                      </div>
+                      <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        $35
+                      </div>
+                      <div className="text-xs text-green-600 dark:text-green-400 font-medium mt-1">
+                        Save $15
+                      </div>
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
+                          Select
+                        </span>
+                      </div>
+                    </button>
+
+                    {/* Package 4: 25 tickets / $75 */}
+                    <button className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">
+                        25
+                      </div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                        tickets
+                      </div>
+                      <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        $75
+                      </div>
+                      <div className="text-xs text-green-600 dark:text-green-400 font-medium mt-1">
+                        Save $50
+                      </div>
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
+                          Select
+                        </span>
+                      </div>
+                    </button>
                   </div>
                 </div>
 
