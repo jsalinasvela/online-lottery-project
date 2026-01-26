@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getActiveRaffle, getAllRaffles, getRafflesByStatus, createRaffle, generateId } from '@/lib/data/store';
+import { getActiveRaffle, getAllRaffles, getRafflesByStatus, createRaffle, generateId, updateRaffle } from '@/lib/data/store';
 import '@/lib/data/seed'; // Initialize data
 import { Raffle } from '@/types/lottery';
 
@@ -50,6 +50,14 @@ export async function POST(request: NextRequest) {
         { error: 'ticketPrice and goalAmount must be positive' },
         { status: 400 }
       );
+    }
+
+    // Check if there's an existing active raffle
+    const existingActiveRaffle = getActiveRaffle();
+    if (existingActiveRaffle) {
+      // Mark existing active raffle as cancelled
+      updateRaffle(existingActiveRaffle.id, { status: 'cancelled' });
+      console.log(`Cancelled previous active raffle: ${existingActiveRaffle.id}`);
     }
 
     // Create new raffle

@@ -8,6 +8,7 @@ import {
   createTransaction,
   addActivity,
   generateId,
+  raffles,
 } from './store';
 
 // ============================================
@@ -74,6 +75,13 @@ let isInitialized = false;
 export function initializeData(): void {
   if (isInitialized) {
     console.log('Data already initialized');
+    return;
+  }
+
+  // Check if store already has data (prevents overwriting on hot-reload)
+  if (raffles.size > 0) {
+    console.log('Store already has data, skipping initialization');
+    isInitialized = true;
     return;
   }
 
