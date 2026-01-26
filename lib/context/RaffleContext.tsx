@@ -6,6 +6,7 @@ import { useActiveRaffle } from '@/lib/hooks/useRaffle';
 import { useUserTickets } from '@/lib/hooks/useTickets';
 import { useRecentActivity, ActivityEntry } from '@/lib/hooks/useRecentActivity';
 import { purchaseTickets as apiPurchaseTickets } from '@/lib/api/tickets';
+import { useToast } from '@/lib/context/ToastContext';
 
 interface RaffleContextType {
   // State
@@ -31,6 +32,7 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   // Initialize user ID from localStorage
   useEffect(() => {
@@ -67,6 +69,11 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
       try {
         await apiPurchaseTickets(activeRaffle.id, userId, quantity);
 
+        // Show success toast
+        const ticketWord = quantity === 1 ? 'ticket' : 'tickets';
+        const totalAmount = activeRaffle.ticketPrice * quantity;
+        showToast(`🎉 Successfully purchased ${quantity} ${ticketWord} for $${totalAmount}!`, 'success');
+
         // Refresh data after purchase
         await Promise.all([
           refreshRaffle(),
@@ -76,12 +83,13 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to purchase tickets';
         setPurchaseError(errorMessage);
+        showToast(errorMessage, 'error');
         throw err;
       } finally {
         setPurchasing(false);
       }
     },
-    [activeRaffle, userId, refreshRaffle, refreshTickets, refreshActivity]
+    [activeRaffle, userId, refreshRaffle, refreshTickets, refreshActivity, showToast]
   );
 
   const loading = raffleLoading || ticketsLoading || activityLoading;
