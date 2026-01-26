@@ -36,10 +36,20 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize user ID from localStorage
   useEffect(() => {
-    // Generate or retrieve user ID
+    // TEMPORARY: Use mock user until Phase 2 authentication is implemented
+    // This uses one of the seeded users from the database
     let storedUserId = localStorage.getItem('userId');
     if (!storedUserId) {
-      storedUserId = `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // Use a random mock user from the seed data (real IDs from database)
+      const mockUserIds = [
+        'cmkvis0800000gn8x895nshkw', // John D.
+        'cmkvis10r0003gn8x9cke4szx', // Sarah M.
+        'cmkvis10r0005gn8xbi4nf8ht', // Mike R.
+        'cmkvis10b0001gn8xih99okt3', // Emily L.
+        'cmkvis10r0004gn8xnzhn2k18', // Alex K.
+        'cmkvis10r0002gn8xwcrt077i', // Lisa P.
+      ];
+      storedUserId = mockUserIds[Math.floor(Math.random() * mockUserIds.length)];
       localStorage.setItem('userId', storedUserId);
     }
     setUserId(storedUserId);
