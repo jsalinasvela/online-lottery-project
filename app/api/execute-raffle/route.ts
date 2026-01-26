@@ -79,6 +79,8 @@ export async function POST(request: NextRequest) {
       status: 'completed',
       winnerId: winningTicket.userId,
       winningTicketId: winningTicket.id,
+      winningTicketNumber: winningTicket.ticketNumber,
+      winnerName: winnerUser?.name || 'Anonymous',
       executedAt,
     });
 

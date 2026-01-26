@@ -393,7 +393,10 @@ export default function AdminPage() {
                     {raffle.status === 'completed' && raffle.winnerId && (
                       <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                         <p className="text-sm font-medium text-yellow-900 dark:text-yellow-200">
-                          🎉 Winner: User ID {raffle.winnerId} | Ticket #{raffle.winningTicketId}
+                          🎉 Winner: {raffle.winnerName || 'Anonymous'} | Ticket #{raffle.winningTicketNumber || raffle.winningTicketId}
+                        </p>
+                        <p className="text-xs text-yellow-800 dark:text-yellow-300 mt-1">
+                          Prize: ${raffle.currentAmount}
                         </p>
                       </div>
                     )}

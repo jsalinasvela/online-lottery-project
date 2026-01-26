@@ -31,6 +31,8 @@ export interface Raffle {
   status: RaffleStatus;
   winnerId?: string;            // Winner user ID (when completed)
   winningTicketId?: string;     // Winning ticket ID
+  winningTicketNumber?: number; // Winning ticket number (for display)
+  winnerName?: string;          // Winner name (for display)
   executedAt?: Date;            // When raffle was executed
   createdAt: Date;
   updatedAt: Date;
