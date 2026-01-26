@@ -7,6 +7,13 @@ import { useUserTickets } from '@/lib/hooks/useTickets';
 import { useRecentActivity, ActivityEntry } from '@/lib/hooks/useRecentActivity';
 import { purchaseTickets as apiPurchaseTickets } from '@/lib/api/tickets';
 import { useToast } from '@/lib/context/ToastContext';
+import UserIdentificationModal from '@/components/user/UserIdentificationModal';
+
+interface UserInfo {
+  id: string;
+  email: string;
+  name: string;
+}
 
 interface RaffleContextType {
   // State
@@ -16,6 +23,7 @@ interface RaffleContextType {
   loading: boolean;
   error: string | null;
   userId: string | null;
+  userInfo: UserInfo | null;
 
   // Actions
   refreshRaffle: () => Promise<void>;
@@ -30,30 +38,36 @@ const RaffleContext = createContext<RaffleContextType | undefined>(undefined);
 
 export function RaffleProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [showIdentificationModal, setShowIdentificationModal] = useState(false);
+  const [pendingPurchaseQuantity, setPendingPurchaseQuantity] = useState<number | null>(null);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const { showToast } = useToast();
 
-  // Initialize user ID from localStorage
+  // Initialize user from localStorage
   useEffect(() => {
-    // TEMPORARY: Use mock user until Phase 2 authentication is implemented
-    // This uses one of the seeded users from the database
-    let storedUserId = localStorage.getItem('userId');
-    if (!storedUserId) {
-      // Use a random mock user from the seed data (real IDs from database)
-      const mockUserIds = [
-        'cmkvis0800000gn8x895nshkw', // John D.
-        'cmkvis10r0003gn8x9cke4szx', // Sarah M.
-        'cmkvis10r0005gn8xbi4nf8ht', // Mike R.
-        'cmkvis10b0001gn8xih99okt3', // Emily L.
-        'cmkvis10r0004gn8xnzhn2k18', // Alex K.
-        'cmkvis10r0002gn8xwcrt077i', // Lisa P.
-      ];
-      storedUserId = mockUserIds[Math.floor(Math.random() * mockUserIds.length)];
-      localStorage.setItem('userId', storedUserId);
+    const storedUser = localStorage.getItem('lottery_user');
+    if (storedUser) {
+      try {
+        const user: UserInfo = JSON.parse(storedUser);
+        setUserId(user.id);
+        setUserInfo(user);
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        localStorage.removeItem('lottery_user');
+      }
     }
-    setUserId(storedUserId);
   }, []);
+
+  // Handle user identification
+  const handleUserIdentified = useCallback((id: string, email: string, name: string) => {
+    const user: UserInfo = { id, email, name };
+    setUserId(id);
+    setUserInfo(user);
+    setShowIdentificationModal(false);
+    showToast(`¡Bienvenido, ${name}!`, 'success');
+  }, [showToast]);
 
   // Use hooks
   const { raffle: activeRaffle, loading: raffleLoading, error: raffleError, refresh: refreshRaffle } = useActiveRaffle();
@@ -65,11 +79,56 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
     activeRaffle?.id || null
   );
 
+  // Auto-retry purchase after user identification
+  useEffect(() => {
+    if (userId && userInfo && pendingPurchaseQuantity && activeRaffle) {
+      // User just identified themselves, retry the purchase
+      const quantity = pendingPurchaseQuantity;
+      setPendingPurchaseQuantity(null); // Clear pending
+
+      const executePurchase = async () => {
+        setPurchasing(true);
+        setPurchaseError(null);
+
+        try {
+          await apiPurchaseTickets(activeRaffle.id, userId, quantity);
+
+          // Show success toast
+          const ticketWord = quantity === 1 ? 'ticket' : 'tickets';
+          const totalAmount = activeRaffle.ticketPrice * quantity;
+          showToast(`🎉 Successfully purchased ${quantity} ${ticketWord} for $${totalAmount}!`, 'success');
+
+          // Refresh data after purchase
+          await Promise.all([
+            refreshRaffle(),
+            refreshTickets(),
+            refreshActivity(),
+          ]);
+        } catch (err) {
+          const errorMessage = err instanceof Error ? err.message : 'Failed to purchase tickets';
+          setPurchaseError(errorMessage);
+          showToast(errorMessage, 'error');
+        } finally {
+          setPurchasing(false);
+        }
+      };
+
+      executePurchase();
+    }
+  }, [userId, userInfo, pendingPurchaseQuantity, activeRaffle, refreshRaffle, refreshTickets, refreshActivity, showToast]);
+
   // Purchase tickets handler
   const purchaseTickets = useCallback(
     async (quantity: number) => {
-      if (!activeRaffle || !userId) {
+      if (!activeRaffle) {
         setPurchaseError('Unable to purchase tickets. Please try again.');
+        return;
+      }
+
+      // Check if user is identified
+      if (!userId || !userInfo) {
+        setPendingPurchaseQuantity(quantity); // Save quantity for retry after identification
+        setShowIdentificationModal(true);
         return;
       }
 
@@ -99,7 +158,7 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
         setPurchasing(false);
       }
     },
-    [activeRaffle, userId, refreshRaffle, refreshTickets, refreshActivity, showToast]
+    [activeRaffle, userId, userInfo, refreshRaffle, refreshTickets, refreshActivity, showToast]
   );
 
   const loading = raffleLoading || ticketsLoading || activityLoading;
@@ -112,6 +171,7 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
     loading,
     error,
     userId,
+    userInfo,
     refreshRaffle,
     refreshTickets,
     refreshActivity,
@@ -120,7 +180,17 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
     purchaseError,
   };
 
-  return <RaffleContext.Provider value={value}>{children}</RaffleContext.Provider>;
+  return (
+    <RaffleContext.Provider value={value}>
+      {children}
+      {showIdentificationModal && (
+        <UserIdentificationModal
+          onIdentified={handleUserIdentified}
+          onClose={() => setShowIdentificationModal(false)}
+        />
+      )}
+    </RaffleContext.Provider>
+  );
 }
 
 export function useRaffleContext() {
