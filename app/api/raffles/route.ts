@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getActiveRaffle, getAllRaffles, getRafflesByStatus, getMostRecentCompletedRaffle, createRaffle, updateRaffle } from '@/lib/data/store';
+import { requireAdmin, isErrorResponse } from '@/lib/auth/middleware';
 import { Raffle } from '@/types/lottery';
 
 // GET /api/raffles - Fetch all raffles or active raffle
@@ -36,6 +37,10 @@ export async function GET(request: NextRequest) {
 
 // POST /api/raffles - Create new raffle (admin)
 export async function POST(request: NextRequest) {
+  // Require admin authentication
+  const sessionOrError = await requireAdmin();
+  if (isErrorResponse(sessionOrError)) return sessionOrError;
+
   try {
     const body = await request.json();
     const { title, description, ticketPrice, goalAmount, maxTickets, endDate } = body;

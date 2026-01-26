@@ -7,9 +7,14 @@ import {
   createWinner,
   getUserById,
 } from '@/lib/data/store';
+import { requireAdmin, isErrorResponse } from '@/lib/auth/middleware';
 
 // POST /api/execute-raffle - Execute raffle and select winner
 export async function POST(request: NextRequest) {
+  // Require admin authentication
+  const sessionOrError = await requireAdmin();
+  if (isErrorResponse(sessionOrError)) return sessionOrError;
+
   try {
     const body = await request.json();
     const { raffleId } = body;

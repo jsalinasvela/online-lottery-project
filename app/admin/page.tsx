@@ -1,14 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Raffle } from '@/types/lottery';
 
 export default function AdminPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [raffles, setRaffles] = useState<Raffle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [executing, setExecuting] = useState<string | null>(null);
+
+  // Redirect if not authenticated or not admin
+  useEffect(() => {
+    if (status === 'loading') return;
+
+    if (!session || session.user.role !== 'ADMIN') {
+      router.push('/admin/login');
+    }
+  }, [session, status, router]);
 
   // Create raffle form state
   const [showCreateForm, setShowCreateForm] = useState(false);

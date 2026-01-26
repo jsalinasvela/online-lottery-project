@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRaffleById, updateRaffle, getWinnerByRaffleId } from '@/lib/data/store';
+import { requireAdmin, isErrorResponse } from '@/lib/auth/middleware';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -42,6 +43,10 @@ export async function PATCH(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  // Require admin authentication
+  const sessionOrError = await requireAdmin();
+  if (isErrorResponse(sessionOrError)) return sessionOrError;
+
   try {
     const { id } = await params;
     const raffle = await getRaffleById(id);
@@ -88,6 +93,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: RouteParams
 ) {
+  // Require admin authentication
+  const sessionOrError = await requireAdmin();
+  if (isErrorResponse(sessionOrError)) return sessionOrError;
+
   try {
     const { id } = await params;
     const raffle = await getRaffleById(id);
