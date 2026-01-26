@@ -57,6 +57,17 @@ export function getRafflesByStatus(status: string): Raffle[] {
   return Array.from(raffles.values()).filter((r) => r.status === status);
 }
 
+export function getMostRecentCompletedRaffle(): Raffle | undefined {
+  const completedRaffles = Array.from(raffles.values())
+    .filter((r) => r.status === 'completed' && r.winnerId)
+    .sort((a, b) => {
+      const aTime = a.executedAt?.getTime() || 0;
+      const bTime = b.executedAt?.getTime() || 0;
+      return bTime - aTime; // Most recent first
+    });
+  return completedRaffles[0];
+}
+
 export function updateRaffle(id: string, updates: Partial<Raffle>): Raffle | undefined {
   const raffle = raffles.get(id);
   if (!raffle) return undefined;

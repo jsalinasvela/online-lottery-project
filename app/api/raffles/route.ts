@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getActiveRaffle, getAllRaffles, getRafflesByStatus, createRaffle, generateId, updateRaffle } from '@/lib/data/store';
+import { getActiveRaffle, getAllRaffles, getRafflesByStatus, getMostRecentCompletedRaffle, createRaffle, generateId, updateRaffle } from '@/lib/data/store';
 import '@/lib/data/seed'; // Initialize data
 import { Raffle } from '@/types/lottery';
 
@@ -13,6 +13,10 @@ export async function GET(request: NextRequest) {
       // Fetch active raffle only
       const activeRaffle = getActiveRaffle();
       return NextResponse.json({ raffle: activeRaffle || null });
+    } else if (status === 'recent-completed') {
+      // Fetch most recent completed raffle with winner
+      const recentCompleted = getMostRecentCompletedRaffle();
+      return NextResponse.json({ raffle: recentCompleted || null });
     } else if (status) {
       // Fetch raffles by specific status
       const raffles = getRafflesByStatus(status);

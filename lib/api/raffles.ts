@@ -52,3 +52,19 @@ export async function fetchRaffleHistory(): Promise<Raffle[]> {
     throw error;
   }
 }
+
+export async function fetchRecentCompletedRaffle(): Promise<Raffle | null> {
+  try {
+    const response = await fetch('/api/raffles?status=recent-completed');
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch recent completed raffle');
+    }
+
+    const data = await response.json();
+    return data.raffle;
+  } catch (error) {
+    console.error('Error fetching recent completed raffle:', error);
+    throw error;
+  }
+}

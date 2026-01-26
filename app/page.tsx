@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import GlassVisualization from '@/components/raffle/GlassVisualization';
+import WinnerBanner from '@/components/raffle/WinnerBanner';
 import { useRaffleContext } from '@/lib/context/RaffleContext';
+import { useRecentCompletedRaffle } from '@/lib/hooks/useRaffle';
 
 function getInitials(name: string): string {
   return name
@@ -61,6 +63,7 @@ export default function Home() {
     purchaseTickets,
   } = useRaffleContext();
 
+  const { raffle: recentCompletedRaffle } = useRecentCompletedRaffle();
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
 
   const handlePurchase = async (quantity: number) => {
@@ -147,6 +150,11 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Winner Banner */}
+        {recentCompletedRaffle && (
+          <WinnerBanner raffle={recentCompletedRaffle} />
+        )}
+
         {/* Purchase Error Message */}
         {purchaseError && (
           <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
