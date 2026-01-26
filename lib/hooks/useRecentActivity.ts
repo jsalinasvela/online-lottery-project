@@ -1,17 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-
-// Define ActivityEntry interface locally to avoid circular dependency
-export interface ActivityEntry {
-  id: string;
-  userId: string;
-  userName: string;
-  quantity: number;
-  totalAmount: number;
-  purchaseDate: Date;
-  raffleId: string;
-}
+import { fetchRecentActivity } from '@/lib/api/activity';
+import { ActivityEntry } from '@/lib/data/store';
 
 const POLLING_INTERVAL = 5000; // 5 seconds for more real-time feel
 
@@ -27,9 +18,8 @@ export function useRecentActivity(raffleId: string | null) {
     }
 
     try {
-      // For now, return empty array since activity API doesn't exist yet
-      // This will be implemented in Phase 3
-      setActivities([]);
+      const data = await fetchRecentActivity(raffleId, 20);
+      setActivities(data);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch activity');
