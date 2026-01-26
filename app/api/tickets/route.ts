@@ -6,12 +6,7 @@ import {
   createTransaction,
   getTicketsByUserId,
   getTicketCount,
-  getUserById,
-  generateId,
-  addActivity,
 } from '@/lib/data/store';
-import '@/lib/data/seed'; // Initialize data
-import { Ticket, PurchaseTransaction } from '@/types/lottery';
 import { isValidQuantity } from '@/lib/utils/validation';
 
 // POST /api/tickets - Purchase tickets
@@ -43,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get raffle
-    const raffle = getRaffleById(raffleId);
+    const raffle = await getRaffleById(raffleId);
     if (!raffle) {
       return NextResponse.json(
         { error: 'Raffle not found' },
@@ -61,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     // Check max tickets limit
     if (raffle.maxTickets) {
-      const currentTicketCount = getTicketCount(raffleId);
+      const currentTicketCount = await getTicketCount(raffleId);
       if (currentTicketCount + quantity > raffle.maxTickets) {
         return NextResponse.json(
           { error: `Not enough tickets available. Only ${raffle.maxTickets - currentTicketCount} tickets remaining.` },
@@ -70,22 +65,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Get user (for activity feed name)
-    const user = getUserById(userId);
-    const userName = user ? user.name : 'Anonymous';
-
     // Calculate totals
     const totalAmount = raffle.ticketPrice * quantity;
     const purchaseDate = new Date();
 
     // Create tickets
     const ticketIds: string[] = [];
-    const tickets: Ticket[] = [];
-    const currentTicketCount = getTicketCount(raffleId);
+    const tickets: any[] = [];
+    const currentTicketCount = await getTicketCount(raffleId);
 
     for (let i = 0; i < quantity; i++) {
-      const ticket: Ticket = {
-        id: generateId(),
+      const ticketData = {
         raffleId,
         userId,
         ticketNumber: currentTicketCount + i + 1,
@@ -93,39 +83,27 @@ export async function POST(request: NextRequest) {
         purchaseDate,
         isWinner: false,
       };
-      createTicket(ticket);
+      const ticket = await createTicket(ticketData);
       tickets.push(ticket);
       ticketIds.push(ticket.id);
     }
 
     // Create transaction
-    const transaction: PurchaseTransaction = {
-      id: generateId(),
+    const transactionData = {
       userId,
       raffleId,
       ticketIds,
       quantity,
       totalAmount,
       transactionDate: purchaseDate,
-      status: 'completed',
+      status: 'completed' as const,
     };
-    createTransaction(transaction);
+    const transaction = await createTransaction(transactionData);
 
     // Update raffle amounts
-    updateRaffle(raffleId, {
+    await updateRaffle(raffleId, {
       currentAmount: raffle.currentAmount + totalAmount,
       ticketsSold: raffle.ticketsSold + quantity,
-    });
-
-    // Add to activity feed
-    addActivity({
-      id: transaction.id,
-      userId,
-      userName,
-      quantity,
-      totalAmount,
-      purchaseDate,
-      raffleId,
     });
 
     return NextResponse.json(
@@ -155,7 +133,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const tickets = getTicketsByUserId(userId, raffleId);
+    const tickets = await getTicketsByUserId(userId, raffleId);
 
     return NextResponse.json({ tickets });
   } catch (error) {

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRaffleById, updateRaffle, getWinnerByRaffleId } from '@/lib/data/store';
-import '@/lib/data/seed'; // Initialize data
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -13,7 +12,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const raffle = getRaffleById(id);
+    const raffle = await getRaffleById(id);
 
     if (!raffle) {
       return NextResponse.json(
@@ -25,7 +24,7 @@ export async function GET(
     // Include winner info if raffle is completed
     let winner = null;
     if (raffle.status === 'completed') {
-      winner = getWinnerByRaffleId(id);
+      winner = await getWinnerByRaffleId(id);
     }
 
     return NextResponse.json({ raffle, winner });
@@ -45,7 +44,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const raffle = getRaffleById(id);
+    const raffle = await getRaffleById(id);
 
     if (!raffle) {
       return NextResponse.json(
@@ -72,7 +71,7 @@ export async function PATCH(
     if (endDate !== undefined) updates.endDate = new Date(endDate);
     if (status !== undefined) updates.status = status;
 
-    const updatedRaffle = updateRaffle(id, updates);
+    const updatedRaffle = await updateRaffle(id, updates);
 
     return NextResponse.json({ raffle: updatedRaffle, success: true });
   } catch (error) {
@@ -91,7 +90,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const raffle = getRaffleById(id);
+    const raffle = await getRaffleById(id);
 
     if (!raffle) {
       return NextResponse.json(
@@ -110,7 +109,7 @@ export async function DELETE(
 
     // In a real app, you would refund all tickets here
     // For now, just mark as cancelled
-    updateRaffle(id, { status: 'cancelled' });
+    await updateRaffle(id, { status: 'cancelled' });
 
     return NextResponse.json({ success: true });
   } catch (error) {

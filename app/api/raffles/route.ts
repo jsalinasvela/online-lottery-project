@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getActiveRaffle, getAllRaffles, getRafflesByStatus, getMostRecentCompletedRaffle, createRaffle, generateId, updateRaffle } from '@/lib/data/store';
-import '@/lib/data/seed'; // Initialize data
+import { getActiveRaffle, getAllRaffles, getRafflesByStatus, getMostRecentCompletedRaffle, createRaffle, updateRaffle } from '@/lib/data/store';
 import { Raffle } from '@/types/lottery';
 
 // GET /api/raffles - Fetch all raffles or active raffle
@@ -11,19 +10,19 @@ export async function GET(request: NextRequest) {
 
     if (status === 'active') {
       // Fetch active raffle only
-      const activeRaffle = getActiveRaffle();
+      const activeRaffle = await getActiveRaffle();
       return NextResponse.json({ raffle: activeRaffle || null });
     } else if (status === 'recent-completed') {
       // Fetch most recent completed raffle with winner
-      const recentCompleted = getMostRecentCompletedRaffle();
+      const recentCompleted = await getMostRecentCompletedRaffle();
       return NextResponse.json({ raffle: recentCompleted || null });
     } else if (status) {
       // Fetch raffles by specific status
-      const raffles = getRafflesByStatus(status);
+      const raffles = await getRafflesByStatus(status);
       return NextResponse.json({ raffles });
     } else {
       // Fetch all raffles
-      const raffles = getAllRaffles();
+      const raffles = await getAllRaffles();
       return NextResponse.json({ raffles });
     }
   } catch (error) {
@@ -57,16 +56,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if there's an existing active raffle
-    const existingActiveRaffle = getActiveRaffle();
+    const existingActiveRaffle = await getActiveRaffle();
     if (existingActiveRaffle) {
       // Mark existing active raffle as cancelled
-      updateRaffle(existingActiveRaffle.id, { status: 'cancelled' });
+      await updateRaffle(existingActiveRaffle.id, { status: 'cancelled' });
       console.log(`Cancelled previous active raffle: ${existingActiveRaffle.id}`);
     }
 
-    // Create new raffle
-    const newRaffle: Raffle = {
-      id: generateId(),
+    // Create new raffle (Prisma will generate the ID)
+    const newRaffle = {
       title,
       description: description || '',
       ticketPrice,
@@ -76,12 +74,10 @@ export async function POST(request: NextRequest) {
       maxTickets: maxTickets || undefined,
       startDate: new Date(),
       endDate: endDate ? new Date(endDate) : undefined,
-      status: 'active',
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      status: 'active' as const,
     };
 
-    const raffle = createRaffle(newRaffle);
+    const raffle = await createRaffle(newRaffle);
 
     return NextResponse.json({ raffle, success: true }, { status: 201 });
   } catch (error) {

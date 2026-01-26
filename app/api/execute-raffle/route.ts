@@ -6,10 +6,7 @@ import {
   updateTicket,
   createWinner,
   getUserById,
-  generateId,
 } from '@/lib/data/store';
-import '@/lib/data/seed'; // Initialize data
-import { Winner } from '@/types/lottery';
 
 // POST /api/execute-raffle - Execute raffle and select winner
 export async function POST(request: NextRequest) {
@@ -26,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get raffle
-    const raffle = getRaffleById(raffleId);
+    const raffle = await getRaffleById(raffleId);
     if (!raffle) {
       return NextResponse.json(
         { error: 'Raffle not found' },
@@ -43,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get all tickets for this raffle
-    const tickets = getTicketsByRaffleId(raffleId);
+    const tickets = await getTicketsByRaffleId(raffleId);
 
     // Validate at least one ticket sold
     if (tickets.length === 0) {
@@ -68,14 +65,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark ticket as winner
-    updateTicket(winningTicket.id, { isWinner: true });
+    await updateTicket(winningTicket.id, { isWinner: true });
 
     // Get winner user info
-    const winnerUser = getUserById(winningTicket.userId);
+    const winnerUser = await getUserById(winningTicket.userId);
 
     // Update raffle status
     const executedAt = new Date();
-    updateRaffle(raffleId, {
+    await updateRaffle(raffleId, {
       status: 'completed',
       winnerId: winningTicket.userId,
       winningTicketId: winningTicket.id,
@@ -84,19 +81,18 @@ export async function POST(request: NextRequest) {
       executedAt,
     });
 
-    // Create winner record
-    const winner: Winner = {
-      id: generateId(),
+    // Create winner record (Prisma will generate the ID)
+    const winnerData = {
       raffleId,
       userId: winningTicket.userId,
       ticketId: winningTicket.id,
       prizeAmount: raffle.currentAmount,
       announcedAt: executedAt,
     };
-    createWinner(winner);
+    const winner = await createWinner(winnerData);
 
     // Get updated raffle
-    const updatedRaffle = getRaffleById(raffleId);
+    const updatedRaffle = await getRaffleById(raffleId);
 
     return NextResponse.json({
       success: true,

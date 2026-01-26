@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRecentActivities } from '@/lib/data/store';
-import '@/lib/data/seed'; // Initialize data
 
 // GET /api/activity - Fetch recent activity for a raffle
 export async function GET(request: NextRequest) {
@@ -17,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     const limit = limitParam ? parseInt(limitParam) : 20;
-    const activities = getRecentActivities(raffleId, limit);
+    const activities = await getRecentActivities(raffleId, limit);
 
     return NextResponse.json({ activities });
   } catch (error) {
