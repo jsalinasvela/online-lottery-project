@@ -106,6 +106,15 @@ export function getTicketCount(raffleId: string): number {
   return getTicketsByRaffleId(raffleId).length;
 }
 
+export function updateTicket(id: string, updates: Partial<Ticket>): Ticket | undefined {
+  const ticket = tickets.get(id);
+  if (!ticket) return undefined;
+
+  const updatedTicket = { ...ticket, ...updates };
+  tickets.set(id, updatedTicket);
+  return updatedTicket;
+}
+
 // ============================================
 // User Operations
 // ============================================
