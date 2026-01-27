@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { PurchaseTransaction } from '@/types/lottery';
+import { formatCurrency } from '@/lib/utils/currency';
+import { translations as t } from '@/lib/translations/es';
 
 interface YapePaymentModalProps {
   transaction: PurchaseTransaction;
@@ -30,7 +32,7 @@ export default function YapePaymentModal({ transaction, onClose }: YapePaymentMo
 
   // WhatsApp message with reference code
   const whatsappMessage = encodeURIComponent(
-    `Hola, acabo de realizar un pago por Yape.\nCódigo de referencia: ${referenceCode}\nMonto: S/ ${transaction.totalAmount.toFixed(2)}`
+    `Hola, acabo de realizar un pago por Yape.\nCódigo de referencia: ${referenceCode}\nMonto: ${formatCurrency(transaction.totalAmount)}`
   );
 
   return (
@@ -43,12 +45,12 @@ export default function YapePaymentModal({ transaction, onClose }: YapePaymentMo
 
         {/* Amount Display */}
         <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-6">
-          <p className="text-sm text-slate-600 dark:text-slate-400">Total a pagar</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t.payment.totalToPay}</p>
           <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-            S/ {transaction.totalAmount.toFixed(2)}
+            {formatCurrency(transaction.totalAmount)}
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {transaction.quantity} boleto{transaction.quantity > 1 ? 's' : ''}
+            {transaction.quantity} {transaction.quantity === 1 ? t.payment.ticket : t.payment.tickets}
           </p>
         </div>
 

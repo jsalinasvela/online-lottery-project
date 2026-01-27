@@ -4,6 +4,12 @@
  */
 
 export const translations = {
+  // Currency configuration
+  currency: {
+    symbol: 'S/',
+    code: 'PEN',
+    locale: 'es-PE',
+  },
   // Home page
   home: {
     title: '🏆 Sorteo de la Suerte ✨',

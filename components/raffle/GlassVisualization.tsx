@@ -1,4 +1,5 @@
 import { translations as t } from '@/lib/translations/es';
+import { formatCurrency } from '@/lib/utils/currency';
 
 interface GlassVisualizationProps {
   currentAmount: number;
@@ -145,10 +146,10 @@ export default function GlassVisualization({
       <div className="text-center mt-4 sm:mt-6 space-y-2 px-4">
         <div>
           <div className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-            ${currentAmount.toLocaleString()}
+            {formatCurrency(currentAmount)}
           </div>
           <div className="text-slate-400 text-xs sm:text-sm mt-1">
-            {t.glass.of} ${goalAmount.toLocaleString()} {t.glass.goal}
+            {t.glass.of} {formatCurrency(goalAmount)} {t.glass.goal}
           </div>
         </div>
 

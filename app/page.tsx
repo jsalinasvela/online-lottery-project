@@ -6,6 +6,7 @@ import WinnerBanner from '@/components/raffle/WinnerBanner';
 import { useRaffleContext } from '@/lib/context/RaffleContext';
 import { useRecentCompletedRaffle } from '@/lib/hooks/useRaffle';
 import { translations as t } from '@/lib/translations/es';
+import { formatCurrency } from '@/lib/utils/currency';
 
 function getInitials(name: string): string {
   return name
@@ -273,7 +274,7 @@ export default function Home() {
                         {t.home.raffle.ticket}
                       </div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
-                        ${activeRaffle.ticketPrice}
+                        {formatCurrency(activeRaffle.ticketPrice)}
                       </div>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
@@ -304,7 +305,7 @@ export default function Home() {
                         {t.home.raffle.tickets}
                       </div>
                       <div className="text-lg font-bold text-orange-600 dark:text-orange-400">
-                        ${activeRaffle.ticketPrice * 5}
+                        {formatCurrency(activeRaffle.ticketPrice * 5)}
                       </div>
                       <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-full">
@@ -331,7 +332,7 @@ export default function Home() {
                         {t.home.raffle.tickets}
                       </div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
-                        ${activeRaffle.ticketPrice * 10}
+                        {formatCurrency(activeRaffle.ticketPrice * 10)}
                       </div>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
@@ -358,7 +359,7 @@ export default function Home() {
                         {t.home.raffle.tickets}
                       </div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
-                        ${activeRaffle.ticketPrice * 25}
+                        {formatCurrency(activeRaffle.ticketPrice * 25)}
                       </div>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
