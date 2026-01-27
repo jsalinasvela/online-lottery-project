@@ -56,17 +56,29 @@ export interface Ticket {
 // Transaction Types
 // ============================================
 
-export type TransactionStatus = 'pending' | 'completed' | 'failed';
+export type TransactionStatus =
+  | 'pending_payment'   // Waiting for user to send Yape payment
+  | 'pending_review'    // Screenshot submitted, waiting for admin review
+  | 'completed'         // Admin approved payment
+  | 'rejected'          // Admin rejected payment
+  | 'failed';           // Technical failure
 
 export interface PurchaseTransaction {
   id: string;
   userId: string;
   raffleId: string;
-  ticketIds: string[];          // Array of purchased ticket IDs
+  ticketIds: string[];          // Array of purchased ticket IDs (empty until approved)
   quantity: number;
   totalAmount: number;
   transactionDate: Date;
   status: TransactionStatus;
+
+  // Yape payment verification fields
+  paymentProofUrl?: string;     // Screenshot URL or path
+  paymentMethod?: string;       // Payment method (e.g., 'yape')
+  adminNotes?: string;          // Admin can add notes during review
+  reviewedAt?: Date;            // When admin reviewed
+  reviewedBy?: string;          // Admin user ID who reviewed
 }
 
 // ============================================

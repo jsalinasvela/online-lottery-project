@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getRaffleById,
   updateRaffle,
-  createTicket,
   createTransaction,
   getTicketsByUserId,
   getTicketCount,
@@ -69,45 +68,31 @@ export async function POST(request: NextRequest) {
     const totalAmount = raffle.ticketPrice * quantity;
     const purchaseDate = new Date();
 
-    // Create tickets
-    const ticketIds: string[] = [];
-    const tickets: any[] = [];
-    const currentTicketCount = await getTicketCount(raffleId);
-
-    for (let i = 0; i < quantity; i++) {
-      const ticketData = {
-        raffleId,
-        userId,
-        ticketNumber: currentTicketCount + i + 1,
-        purchaseAmount: raffle.ticketPrice,
-        purchaseDate,
-        isWinner: false,
-      };
-      const ticket = await createTicket(ticketData);
-      tickets.push(ticket);
-      ticketIds.push(ticket.id);
-    }
-
-    // Create transaction
+    // Create PENDING_PAYMENT transaction (no tickets yet)
+    // Tickets will be created after admin approves payment
     const transactionData = {
       userId,
       raffleId,
-      ticketIds,
+      ticketIds: [], // Empty until admin approves
       quantity,
       totalAmount,
       transactionDate: purchaseDate,
-      status: 'completed' as const,
+      status: 'pending_payment' as const,
     };
     const transaction = await createTransaction(transactionData);
 
-    // Update raffle amounts
+    // Optimistically update raffle currentAmount for glass visualization
+    // Note: ticketsSold is NOT incremented yet - only after admin approval
     await updateRaffle(raffleId, {
       currentAmount: raffle.currentAmount + totalAmount,
-      ticketsSold: raffle.ticketsSold + quantity,
     });
 
     return NextResponse.json(
-      { tickets, transaction, success: true },
+      {
+        transaction,
+        success: true,
+        message: 'Complete payment via Yape to confirm your purchase'
+      },
       { status: 201 }
     );
   } catch (error) {
