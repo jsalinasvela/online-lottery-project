@@ -1,3 +1,5 @@
+import { translations as t } from '@/lib/translations/es';
+
 interface GlassVisualizationProps {
   currentAmount: number;
   goalAmount: number;
@@ -146,13 +148,13 @@ export default function GlassVisualization({
             ${currentAmount.toLocaleString()}
           </div>
           <div className="text-slate-400 text-xs sm:text-sm mt-1">
-            of ${goalAmount.toLocaleString()} goal
+            {t.glass.of} ${goalAmount.toLocaleString()} {t.glass.goal}
           </div>
         </div>
 
         <div className="flex items-center justify-center gap-2 text-slate-400 text-xs sm:text-sm">
           <span>🎫</span>
-          <span>{ticketsSold} tickets sold</span>
+          <span>{ticketsSold} {ticketsSold === 1 ? t.glass.ticket : t.glass.tickets} {t.glass.ticketsSold}</span>
         </div>
 
         {/* Progress badge */}

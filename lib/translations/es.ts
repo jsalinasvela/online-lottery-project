@@ -98,6 +98,15 @@ export const translations = {
     raffleName: 'Sorteo',
   },
 
+  // Glass Visualization
+  glass: {
+    of: 'de',
+    goal: 'meta',
+    ticketsSold: 'vendidos',
+    ticket: 'boleto',
+    tickets: 'boletos',
+  },
+
   // Payment Modal (Yape)
   payment: {
     title: 'Completa tu pago con Yape',
