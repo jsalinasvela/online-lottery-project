@@ -115,7 +115,7 @@ export default function Home() {
           <p className="text-slate-600 dark:text-slate-400 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
           >
             {t.home.error.retry}
           </button>
@@ -243,7 +243,7 @@ export default function Home() {
                     <button
                       onClick={() => handlePurchase(1)}
                       disabled={purchasing}
-                      className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                     >
                       {selectedPackage === 1 && (
                         <div className="absolute inset-0 flex items-center justify-center bg-purple-600/10 rounded-xl">
@@ -270,7 +270,7 @@ export default function Home() {
                     <button
                       onClick={() => handlePurchase(5)}
                       disabled={purchasing}
-                      className="relative bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-2 border-orange-400 dark:border-orange-500 rounded-xl p-4 hover:border-orange-500 hover:shadow-lg transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="relative bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-2 border-orange-400 dark:border-orange-500 rounded-xl p-4 hover:border-orange-500 hover:shadow-lg transition-all duration-200 text-left group disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                     >
                       {selectedPackage === 5 && (
                         <div className="absolute inset-0 flex items-center justify-center bg-orange-600/10 rounded-xl">
@@ -301,7 +301,7 @@ export default function Home() {
                     <button
                       onClick={() => handlePurchase(10)}
                       disabled={purchasing}
-                      className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                     >
                       {selectedPackage === 10 && (
                         <div className="absolute inset-0 flex items-center justify-center bg-purple-600/10 rounded-xl">
@@ -328,7 +328,7 @@ export default function Home() {
                     <button
                       onClick={() => handlePurchase(25)}
                       disabled={purchasing}
-                      className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="relative bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-200 text-left group disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                     >
                       {selectedPackage === 25 && (
                         <div className="absolute inset-0 flex items-center justify-center bg-purple-600/10 rounded-xl">

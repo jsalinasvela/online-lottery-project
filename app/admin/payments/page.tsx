@@ -205,13 +205,13 @@ export default function AdminPaymentsPage() {
             <div className="flex gap-3">
               <a
                 href="/admin"
-                className="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors"
+                className="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors cursor-pointer"
               >
                 Back to Admin
               </a>
               <a
                 href="/"
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
               >
                 Home
               </a>
@@ -262,7 +262,7 @@ export default function AdminPaymentsPage() {
             <button
               key={filter.value}
               onClick={() => setStatusFilter(filter.value)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap cursor-pointer ${
                 statusFilter === filter.value
                   ? 'bg-purple-600 text-white'
                   : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
@@ -410,14 +410,14 @@ export default function AdminPaymentsPage() {
                           <button
                             onClick={() => handleApprove(tx.id)}
                             disabled={processing === tx.id}
-                            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 font-medium cursor-pointer disabled:cursor-not-allowed"
                           >
                             {processing === tx.id ? 'Processing...' : '✓ Approve & Create Tickets'}
                           </button>
                           <button
                             onClick={() => handleReject(tx.id)}
                             disabled={processing === tx.id}
-                            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 font-medium cursor-pointer disabled:cursor-not-allowed"
                           >
                             {processing === tx.id ? 'Processing...' : '✗ Reject Payment'}
                           </button>
