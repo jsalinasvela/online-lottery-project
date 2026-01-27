@@ -18,16 +18,30 @@ export default function GlassVisualization({
 
   return (
     <div className="relative max-w-md mx-auto">
-      {/* Scale markers - hidden on very small screens */}
-      <div className="hidden sm:flex absolute left-0 top-0 h-full flex-col justify-between text-xs text-slate-500 -ml-8 md:-ml-12 py-8">
-        <div>100%</div>
-        <div>75%</div>
-        <div>50%</div>
-        <div>25%</div>
-      </div>
-
       {/* Glass container - responsive sizing */}
       <div className="relative mx-auto w-[240px] h-[340px] sm:w-[280px] sm:h-[400px]">
+        {/* Scale markers with lines - positioned at correct heights */}
+        {/* 100% mark */}
+        <div className="hidden sm:flex absolute left-0 items-center -ml-8 md:-ml-12" style={{ top: '30%' }}>
+          <span className="text-xs text-slate-500 mr-2">100%</span>
+          <div className="w-6 h-0.5 bg-slate-300" />
+        </div>
+        {/* 75% mark */}
+        <div className="hidden sm:flex absolute left-0 items-center -ml-8 md:-ml-12" style={{ top: '45.625%' }}>
+          <span className="text-xs text-slate-500 mr-2">75%</span>
+          <div className="w-6 h-0.5 bg-slate-300" />
+        </div>
+        {/* 50% mark */}
+        <div className="hidden sm:flex absolute left-0 items-center -ml-8 md:-ml-12" style={{ top: '61.25%' }}>
+          <span className="text-xs text-slate-500 mr-2">50%</span>
+          <div className="w-6 h-0.5 bg-slate-300" />
+        </div>
+        {/* 25% mark */}
+        <div className="hidden sm:flex absolute left-0 items-center -ml-8 md:-ml-12" style={{ top: '76.875%' }}>
+          <span className="text-xs text-slate-500 mr-2">25%</span>
+          <div className="w-6 h-0.5 bg-slate-300" />
+        </div>
+
         {/* Glass outline with handle */}
         <svg
           viewBox="0 0 280 400"
