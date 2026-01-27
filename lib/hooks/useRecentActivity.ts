@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { fetchRecentActivity } from '@/lib/api/activity';
 import { ActivityEntry } from '@/lib/data/store';
 
+// Re-export ActivityEntry for convenience
+export type { ActivityEntry };
+
 const POLLING_INTERVAL = 5000; // 5 seconds for more real-time feel
 
 export function useRecentActivity(raffleId: string | null) {
