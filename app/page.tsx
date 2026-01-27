@@ -5,6 +5,7 @@ import GlassVisualization from '@/components/raffle/GlassVisualization';
 import WinnerBanner from '@/components/raffle/WinnerBanner';
 import { useRaffleContext } from '@/lib/context/RaffleContext';
 import { useRecentCompletedRaffle } from '@/lib/hooks/useRaffle';
+import { translations as t } from '@/lib/translations/es';
 
 function getInitials(name: string): string {
   return name
@@ -16,19 +17,19 @@ function getInitials(name: string): string {
 }
 
 function getTimeLeft(endDate: Date | undefined): string {
-  if (!endDate) return 'Until Goal';
+  if (!endDate) return t.home.stats.untilGoal;
 
   const now = new Date();
   const end = new Date(endDate);
   const diff = end.getTime() - now.getTime();
 
-  if (diff <= 0) return 'Ended';
+  if (diff <= 0) return t.home.stats.ended;
 
   const hours = Math.floor(diff / (1000 * 60 * 60));
-  if (hours < 24) return `${hours}h`;
+  if (hours < 24) return `${hours}${t.time.hours}`;
 
   const days = Math.floor(hours / 24);
-  return `${days}d`;
+  return `${days}${t.time.days}`;
 }
 
 function getTimeAgo(date: Date): string {
@@ -36,14 +37,24 @@ function getTimeAgo(date: Date): string {
   const diff = now.getTime() - new Date(date).getTime();
   const minutes = Math.floor(diff / (1000 * 60));
 
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  if (minutes < 1) return t.home.recentActivity.justNow;
+  if (minutes < 60) {
+    return minutes === 1
+      ? `1 ${t.home.recentActivity.minuteAgo}`
+      : `${minutes} ${t.home.recentActivity.minutesAgo}`;
+  }
 
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  if (hours < 24) {
+    return hours === 1
+      ? `1 ${t.home.recentActivity.hourAgo}`
+      : `${hours} ${t.home.recentActivity.hoursAgo}`;
+  }
 
   const days = Math.floor(hours / 24);
-  return `${days} day${days === 1 ? '' : 's'} ago`;
+  return days === 1
+    ? `1 ${t.home.recentActivity.dayAgo}`
+    : `${days} ${t.home.recentActivity.daysAgo}`;
 }
 
 function getUniquePlayerCount(activities: any[]): number {
@@ -85,7 +96,7 @@ export default function Home() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-slate-100 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-300">Loading raffle data...</p>
+          <p className="text-slate-600 dark:text-slate-300">{t.home.loading.title}</p>
         </div>
       </div>
     );
@@ -98,14 +109,14 @@ export default function Home() {
         <div className="text-center bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl border border-slate-200 dark:border-slate-700 max-w-md">
           <div className="text-6xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-            Error Loading Raffle
+            {t.home.error.title}
           </h2>
           <p className="text-slate-600 dark:text-slate-400 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
-            Retry
+            {t.home.error.retry}
           </button>
         </div>
       </div>
@@ -119,10 +130,10 @@ export default function Home() {
         <div className="text-center bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl border border-slate-200 dark:border-slate-700 max-w-md">
           <div className="text-6xl mb-4">🎟️</div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-            No Active Raffle
+            {t.home.noActiveRaffle.title}
           </h2>
           <p className="text-slate-600 dark:text-slate-400">
-            Check back soon for the next exciting raffle!
+            {t.home.noActiveRaffle.description}
           </p>
         </div>
       </div>
@@ -139,11 +150,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3">
             <span className="bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              🏆 Lucky Draw ✨
+              {t.home.title}
             </span>
           </h1>
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
-            Watch the prize pool grow in real-time! 🚀
+            {t.home.subtitle}
           </p>
         </div>
       </header>
@@ -162,7 +173,7 @@ export default function Home() {
               <span className="text-2xl">❌</span>
               <div>
                 <h4 className="font-semibold text-red-900 dark:text-red-200 mb-1">
-                  Purchase Failed
+                  {t.home.purchaseError.title}
                 </h4>
                 <p className="text-sm text-red-700 dark:text-red-300">{purchaseError}</p>
               </div>
@@ -180,7 +191,7 @@ export default function Home() {
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">{playerCount}</div>
-            <div className="text-sm text-purple-100 group-hover:text-white transition-colors">Players</div>
+            <div className="text-sm text-purple-100 group-hover:text-white transition-colors">{t.home.stats.players}</div>
           </div>
 
           {/* Time Left Card */}
@@ -191,7 +202,7 @@ export default function Home() {
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">{timeLeft}</div>
-            <div className="text-sm text-green-100 group-hover:text-white transition-colors">Time Left</div>
+            <div className="text-sm text-green-100 group-hover:text-white transition-colors">{t.home.stats.timeLeft}</div>
           </div>
 
           {/* Entries Card */}
@@ -202,7 +213,7 @@ export default function Home() {
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">{activeRaffle.ticketsSold}</div>
-            <div className="text-sm text-pink-100 group-hover:text-white transition-colors">Entries</div>
+            <div className="text-sm text-pink-100 group-hover:text-white transition-colors">{t.home.stats.entries}</div>
           </div>
         </div>
 
@@ -211,7 +222,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-purple-600 to-purple-400 p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm font-medium mb-1">ACTIVE RAFFLE</p>
+                <p className="text-purple-100 text-sm font-medium mb-1">{t.home.raffle.activeLabel}</p>
                 <h3 className="text-2xl font-bold">{activeRaffle.title}</h3>
                 {activeRaffle.description && (
                   <p className="text-purple-100 text-sm mt-2">{activeRaffle.description}</p>
@@ -241,7 +252,7 @@ export default function Home() {
                 {/* Ticket Purchase Section */}
                 <div>
                   <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                    Choose Your Package
+                    {t.home.raffle.choosePackage}
                   </h4>
                   <div className="grid grid-cols-2 gap-3">
                     {/* Package 1: 1 ticket */}
@@ -259,14 +270,14 @@ export default function Home() {
                         1
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-                        ticket
+                        {t.home.raffle.ticket}
                       </div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
                         ${activeRaffle.ticketPrice}
                       </div>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
-                          Select
+                          {t.home.raffle.select}
                         </span>
                       </div>
                     </button>
@@ -284,20 +295,20 @@ export default function Home() {
                       )}
                       <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg flex items-center gap-1">
                         <span>🔥</span>
-                        <span>HOT</span>
+                        <span>{t.home.raffle.hot}</span>
                       </div>
                       <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">
                         5
                       </div>
                       <div className="text-xs text-slate-600 dark:text-slate-300 mb-2">
-                        tickets
+                        {t.home.raffle.tickets}
                       </div>
                       <div className="text-lg font-bold text-orange-600 dark:text-orange-400">
                         ${activeRaffle.ticketPrice * 5}
                       </div>
                       <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-orange-600 text-white px-2 py-0.5 rounded-full">
-                          Select
+                          {t.home.raffle.select}
                         </span>
                       </div>
                     </button>
@@ -317,14 +328,14 @@ export default function Home() {
                         10
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-                        tickets
+                        {t.home.raffle.tickets}
                       </div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
                         ${activeRaffle.ticketPrice * 10}
                       </div>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
-                          Select
+                          {t.home.raffle.select}
                         </span>
                       </div>
                     </button>
@@ -344,14 +355,14 @@ export default function Home() {
                         25
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-                        tickets
+                        {t.home.raffle.tickets}
                       </div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
                         ${activeRaffle.ticketPrice * 25}
                       </div>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
-                          Select
+                          {t.home.raffle.select}
                         </span>
                       </div>
                     </button>
@@ -361,7 +372,7 @@ export default function Home() {
                 {/* My Tickets Section */}
                 <div>
                   <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                    My Tickets
+                    {t.home.myTickets.title}
                   </h4>
                   {userTickets.length === 0 ? (
                     <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-6 text-center border-2 border-dashed border-slate-200 dark:border-slate-700">
@@ -371,20 +382,20 @@ export default function Home() {
                         </svg>
                       </div>
                       <p className="text-slate-500 dark:text-slate-400 text-sm">
-                        You haven&apos;t purchased any tickets yet
+                        {t.home.myTickets.empty}
                       </p>
                       <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
-                        Select a package above to get started
+                        {t.home.myTickets.emptyHint}
                       </p>
                     </div>
                   ) : (
                     <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                          You own {userTickets.length} ticket{userTickets.length === 1 ? '' : 's'}
+                          {t.home.myTickets.youOwn} {userTickets.length} {userTickets.length === 1 ? t.home.raffle.ticket : t.home.raffle.tickets}
                         </span>
                         <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full font-medium">
-                          Active
+                          {t.home.myTickets.active}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
@@ -398,7 +409,7 @@ export default function Home() {
                         ))}
                         {userTickets.length > 20 && (
                           <div className="text-xs text-slate-500 dark:text-slate-400 px-2 py-1">
-                            +{userTickets.length - 20} more
+                            +{userTickets.length - 20} {t.home.myTickets.more}
                           </div>
                         )}
                       </div>
@@ -418,9 +429,9 @@ export default function Home() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
-                <h3 className="text-xl font-bold">Recent Activity</h3>
+                <h3 className="text-xl font-bold">{t.home.recentActivity.title}</h3>
               </div>
-              <span className="text-sm text-purple-100">Live</span>
+              <span className="text-sm text-purple-100">{t.home.recentActivity.live}</span>
             </div>
           </div>
 
@@ -429,7 +440,7 @@ export default function Home() {
             {recentActivity.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-slate-500 dark:text-slate-400">
-                  No recent activity yet. Be the first to join!
+                  {t.home.recentActivity.empty}
                 </p>
               </div>
             ) : (
@@ -444,9 +455,9 @@ export default function Home() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                        <span className="font-bold">{activity.userName}</span> purchased{' '}
+                        <span className="font-bold">{activity.userName}</span> {t.home.recentActivity.purchased}{' '}
                         <span className="text-purple-600 dark:text-purple-400 font-semibold">
-                          {activity.quantity} ticket{activity.quantity === 1 ? '' : 's'}
+                          {activity.quantity} {activity.quantity === 1 ? t.home.raffle.ticket : t.home.raffle.tickets}
                         </span>
                       </p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -470,7 +481,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-purple-600 to-purple-400 p-4 sm:p-6 text-white">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🎯</span>
-              <h3 className="text-xl font-bold">How It Works</h3>
+              <h3 className="text-xl font-bold">{t.home.howItWorks.title}</h3>
             </div>
           </div>
 
@@ -483,10 +494,10 @@ export default function Home() {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
-                    Purchase Your Tickets
+                    {t.home.howItWorks.step1.title}
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Choose from our ticket packages and join the draw. Watch the prize pool grow in real-time as more players participate.
+                    {t.home.howItWorks.step1.description}
                   </p>
                 </div>
               </div>
@@ -498,10 +509,10 @@ export default function Home() {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
-                    Fair & Transparent Selection
+                    {t.home.howItWorks.step2.title}
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Every ticket has an equal chance to win. When the goal is reached, a winner is automatically selected using a cryptographically secure random process.
+                    {t.home.howItWorks.step2.description}
                   </p>
                 </div>
               </div>
@@ -513,10 +524,10 @@ export default function Home() {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
-                    Instant Payout
+                    {t.home.howItWorks.step3.title}
                   </h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Winners receive their prize immediately after the draw. Check the history section to see past winners and completed raffles.
+                    {t.home.howItWorks.step3.description}
                   </p>
                 </div>
               </div>
@@ -530,10 +541,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-              © 2025 Online Lottery. All rights reserved.
+              {t.home.footer.copyright}
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-500">
-              Play responsibly. Must be 18+ to participate.
+              {t.home.footer.disclaimer}
             </p>
           </div>
         </div>

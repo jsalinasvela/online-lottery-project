@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Raffle } from '@/types/lottery';
+import { translations as t } from '@/lib/translations/es';
 
 interface WinnerBannerProps {
   raffle: Raffle;
@@ -93,10 +94,10 @@ export default function WinnerBanner({ raffle }: WinnerBannerProps) {
           {/* Winner info */}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-0.5">
-              Recent Winner: <span className="text-yellow-700 dark:text-yellow-400">{raffle.winnerName || 'Anonymous'}</span>
+              {t.winner.recentWinner} <span className="text-yellow-700 dark:text-yellow-400">{raffle.winnerName || 'Anonymous'}</span>
             </p>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              Won <span className="font-bold text-yellow-700 dark:text-yellow-500">${raffle.currentAmount.toLocaleString()}</span> with ticket #{raffle.winningTicketNumber} • {raffle.title}
+              {t.winner.won} <span className="font-bold text-yellow-700 dark:text-yellow-500">${raffle.currentAmount.toLocaleString()}</span> {t.winner.with} #{raffle.winningTicketNumber} • {raffle.title}
             </p>
           </div>
         </div>

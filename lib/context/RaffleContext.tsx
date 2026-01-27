@@ -9,6 +9,7 @@ import { purchaseTickets as apiPurchaseTickets } from '@/lib/api/tickets';
 import { useToast } from '@/lib/context/ToastContext';
 import UserIdentificationModal from '@/components/user/UserIdentificationModal';
 import YapePaymentModal from '@/components/payment/YapePaymentModal';
+import { translations as t } from '@/lib/translations/es';
 
 interface UserInfo {
   id: string;
@@ -68,7 +69,7 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
     setUserId(id);
     setUserInfo(user);
     setShowIdentificationModal(false);
-    showToast(`¡Bienvenido, ${name}!`, 'success');
+    showToast(`${t.toast.welcome} ${name}!`, 'success');
   }, [showToast]);
 
   // Use hooks
@@ -192,7 +193,7 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
           transaction={pendingTransaction}
           onClose={() => {
             setPendingTransaction(null);
-            showToast('Esperando confirmación de pago. Te notificaremos cuando se apruebe.', 'info');
+            showToast(t.toast.paymentPending, 'info');
           }}
         />
       )}
