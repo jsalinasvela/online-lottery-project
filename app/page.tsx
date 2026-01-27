@@ -148,13 +148,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900 dark:from-purple-950 dark:via-slate-950 dark:to-indigo-950">
       {/* Header */}
       <header className="border-b border-purple-500/20 dark:border-purple-500/10 bg-purple-900/30 dark:bg-purple-950/30 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">
             <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
               {t.home.title}
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-200 dark:text-slate-300">
+          <p className="text-sm sm:text-base text-slate-200 dark:text-slate-300">
             {t.home.subtitle}
           </p>
         </div>
@@ -187,19 +187,21 @@ export default function Home() {
           {/* Left Column - Glass Visualization */}
           <div className="flex flex-col items-center justify-center lg:sticky lg:top-8 self-start">
             {/* Title/Status Badge */}
-            <div className="mb-6 text-center">
-              <span className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-500/40 px-4 py-2 rounded-full text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <div className="mb-3 text-center relative z-10">
+              <span className="inline-flex items-center gap-2 bg-purple-500/30 border border-purple-400/60 px-4 py-2 rounded-full text-sm font-semibold text-white shadow-lg shadow-purple-500/20">
                 <span>🎯</span>
                 <span>{t.home.raffle.activeLabel}</span>
               </span>
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-3">{activeRaffle.title}</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mt-3 bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.3)]" style={{ textShadow: '0 0 20px rgba(255, 255, 255, 0.3)' }}>
+                {activeRaffle.title}
+              </h2>
               {activeRaffle.description && (
-                <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">{activeRaffle.description}</p>
+                <p className="text-slate-200 dark:text-slate-200 text-sm mt-2">{activeRaffle.description}</p>
               )}
             </div>
 
             {/* Glass Component - Larger */}
-            <div className="w-full max-w-xl">
+            <div className="w-full max-w-xl relative z-0">
               <GlassVisualization
                 currentAmount={activeRaffle.currentAmount}
                 goalAmount={activeRaffle.goalAmount}
