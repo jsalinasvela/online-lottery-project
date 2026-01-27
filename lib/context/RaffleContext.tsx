@@ -1,13 +1,14 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { Raffle, Ticket } from '@/types/lottery';
+import { Raffle, Ticket, PurchaseTransaction } from '@/types/lottery';
 import { useActiveRaffle } from '@/lib/hooks/useRaffle';
 import { useUserTickets } from '@/lib/hooks/useTickets';
 import { useRecentActivity, ActivityEntry } from '@/lib/hooks/useRecentActivity';
 import { purchaseTickets as apiPurchaseTickets } from '@/lib/api/tickets';
 import { useToast } from '@/lib/context/ToastContext';
 import UserIdentificationModal from '@/components/user/UserIdentificationModal';
+import YapePaymentModal from '@/components/payment/YapePaymentModal';
 
 interface UserInfo {
   id: string;
@@ -41,6 +42,7 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [showIdentificationModal, setShowIdentificationModal] = useState(false);
   const [pendingPurchaseQuantity, setPendingPurchaseQuantity] = useState<number | null>(null);
+  const [pendingTransaction, setPendingTransaction] = useState<PurchaseTransaction | null>(null);
   const [purchasing, setPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const { showToast } = useToast();
@@ -91,19 +93,17 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
         setPurchaseError(null);
 
         try {
-          await apiPurchaseTickets(activeRaffle.id, userId, quantity);
+          const transaction = await apiPurchaseTickets(activeRaffle.id, userId, quantity);
 
-          // Show success toast
-          const ticketWord = quantity === 1 ? 'ticket' : 'tickets';
-          const totalAmount = activeRaffle.ticketPrice * quantity;
-          showToast(`🎉 Successfully purchased ${quantity} ${ticketWord} for $${totalAmount}!`, 'success');
+          if (!transaction) {
+            throw new Error('No transaction returned');
+          }
 
-          // Refresh data after purchase
-          await Promise.all([
-            refreshRaffle(),
-            refreshTickets(),
-            refreshActivity(),
-          ]);
+          // Show payment modal instead of success toast
+          setPendingTransaction(transaction);
+
+          // Refresh raffle to show optimistic update in glass visualization
+          await refreshRaffle();
         } catch (err) {
           const errorMessage = err instanceof Error ? err.message : 'Failed to purchase tickets';
           setPurchaseError(errorMessage);
@@ -136,19 +136,17 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
       setPurchaseError(null);
 
       try {
-        await apiPurchaseTickets(activeRaffle.id, userId, quantity);
+        const transaction = await apiPurchaseTickets(activeRaffle.id, userId, quantity);
 
-        // Show success toast
-        const ticketWord = quantity === 1 ? 'ticket' : 'tickets';
-        const totalAmount = activeRaffle.ticketPrice * quantity;
-        showToast(`🎉 Successfully purchased ${quantity} ${ticketWord} for $${totalAmount}!`, 'success');
+        if (!transaction) {
+          throw new Error('No transaction returned');
+        }
 
-        // Refresh data after purchase
-        await Promise.all([
-          refreshRaffle(),
-          refreshTickets(),
-          refreshActivity(),
-        ]);
+        // Show payment modal instead of success toast
+        setPendingTransaction(transaction);
+
+        // Refresh raffle to show optimistic update in glass visualization
+        await refreshRaffle();
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to purchase tickets';
         setPurchaseError(errorMessage);
@@ -187,6 +185,15 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
         <UserIdentificationModal
           onIdentified={handleUserIdentified}
           onClose={() => setShowIdentificationModal(false)}
+        />
+      )}
+      {pendingTransaction && (
+        <YapePaymentModal
+          transaction={pendingTransaction}
+          onClose={() => {
+            setPendingTransaction(null);
+            showToast('Esperando confirmación de pago. Te notificaremos cuando se apruebe.', 'info');
+          }}
         />
       )}
     </RaffleContext.Provider>
