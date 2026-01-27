@@ -20,9 +20,9 @@ export default function GlassVisualization({
   const linePosition = 92.5 - (percentage * 0.625);
 
   return (
-    <div className="relative max-w-md mx-auto">
+    <div className="relative max-w-xl mx-auto">
       {/* Glass container - responsive sizing */}
-      <div className="relative mx-auto w-[240px] h-[340px] sm:w-[280px] sm:h-[400px]">
+      <div className="relative mx-auto w-[280px] h-[400px] sm:w-[320px] sm:h-[460px] lg:w-[360px] lg:h-[520px]">
         {/* Scale markers with lines - positioned at correct heights */}
         {/* 100% mark */}
         <div className="hidden sm:flex absolute left-0 items-center -ml-8 md:-ml-12" style={{ top: '30%' }}>
