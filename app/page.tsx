@@ -16,7 +16,7 @@ function getInitials(name: string): string {
 }
 
 function getTimeLeft(endDate: Date | undefined): string {
-  if (!endDate) return 'N/A';
+  if (!endDate) return 'Until Goal';
 
   const now = new Date();
   const end = new Date(endDate);
@@ -173,36 +173,36 @@ export default function Home() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 max-w-3xl mx-auto">
           {/* Players Card */}
-          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center hover:bg-slate-800/60 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer group">
+          <div className="bg-gradient-to-br from-purple-600 to-purple-700 dark:from-purple-700 dark:to-purple-800 rounded-2xl p-6 border-2 border-purple-500/20 text-center hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all duration-300 cursor-pointer group">
             <div className="flex justify-center mb-3">
-              <svg className="w-8 h-8 text-purple-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-purple-200 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">{playerCount}</div>
-            <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Players</div>
+            <div className="text-sm text-purple-100 group-hover:text-white transition-colors">Players</div>
           </div>
 
           {/* Time Left Card */}
-          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center hover:bg-slate-800/60 hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 cursor-pointer group">
+          <div className="bg-gradient-to-br from-green-600 to-green-700 dark:from-green-700 dark:to-green-800 rounded-2xl p-6 border-2 border-green-500/20 text-center hover:shadow-xl hover:shadow-green-500/30 hover:scale-105 transition-all duration-300 cursor-pointer group">
             <div className="flex justify-center mb-3">
-              <svg className="w-8 h-8 text-green-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-green-200 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">{timeLeft}</div>
-            <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Time Left</div>
+            <div className="text-sm text-green-100 group-hover:text-white transition-colors">Time Left</div>
           </div>
 
           {/* Entries Card */}
-          <div className="bg-slate-800/50 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 text-center hover:bg-slate-800/60 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer group">
+          <div className="bg-gradient-to-br from-pink-600 to-pink-700 dark:from-pink-700 dark:to-pink-800 rounded-2xl p-6 border-2 border-pink-500/20 text-center hover:shadow-xl hover:shadow-pink-500/30 hover:scale-105 transition-all duration-300 cursor-pointer group">
             <div className="flex justify-center mb-3">
-              <svg className="w-8 h-8 text-pink-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-pink-200 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
               </svg>
             </div>
             <div className="text-4xl font-bold text-white mb-1">{activeRaffle.ticketsSold}</div>
-            <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">Entries</div>
+            <div className="text-sm text-pink-100 group-hover:text-white transition-colors">Entries</div>
           </div>
         </div>
 
