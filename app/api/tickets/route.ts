@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   getRaffleById,
-  updateRaffle,
   createTransaction,
   getTicketsByUserId,
   getTicketCount,
@@ -81,11 +80,8 @@ export async function POST(request: NextRequest) {
     };
     const transaction = await createTransaction(transactionData);
 
-    // Optimistically update raffle currentAmount for glass visualization
-    // Note: ticketsSold is NOT incremented yet - only after admin approval
-    await updateRaffle(raffleId, {
-      currentAmount: raffle.currentAmount + totalAmount,
-    });
+    // DO NOT update currentAmount yet - only after admin approval
+    // This prevents the liquid from rising before payment is confirmed
 
     return NextResponse.json(
       {

@@ -85,11 +85,12 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           },
         });
 
-        // Increment raffle ticketsSold (currentAmount already updated optimistically)
+        // Increment raffle ticketsSold and currentAmount
         await tx.raffle.update({
           where: { id: transaction.raffleId },
           data: {
             ticketsSold: { increment: transaction.quantity },
+            currentAmount: { increment: transaction.totalAmount },
           },
         });
 
@@ -102,26 +103,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         ticketCount: result.tickets.length,
       });
     } else if (action === 'reject') {
-      // Reject payment and revert optimistic update
-      await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-        // Update transaction status to rejected
-        await tx.purchaseTransaction.update({
-          where: { id: transactionId },
-          data: {
-            status: 'REJECTED',
-            reviewedAt: new Date(),
-            reviewedBy: session.user.id,
-            adminNotes: notes || null,
-          },
-        });
-
-        // Revert the optimistic currentAmount update
-        await tx.raffle.update({
-          where: { id: transaction.raffleId },
-          data: {
-            currentAmount: { decrement: transaction.totalAmount },
-          },
-        });
+      // Reject payment - no need to revert currentAmount since it was never incremented
+      await prisma.purchaseTransaction.update({
+        where: { id: transactionId },
+        data: {
+          status: 'REJECTED',
+          reviewedAt: new Date(),
+          reviewedBy: session.user.id,
+          adminNotes: notes || null,
+        },
       });
 
       return NextResponse.json({
