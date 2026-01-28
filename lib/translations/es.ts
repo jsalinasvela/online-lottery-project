@@ -176,7 +176,7 @@ export const translations = {
   // Toast messages
   toast: {
     welcome: '¡Bienvenido,',
-    paymentPending: 'Esperando confirmación de pago. Te notificaremos cuando se apruebe.',
+    paymentPending: 'Tu pago está en revisión. Una vez aprobado, recibirás tus boletos y tu aporte se sumará al monto acumulado del sorteo. ¡Te notificaremos pronto!',
   },
 
   // Time formatting
