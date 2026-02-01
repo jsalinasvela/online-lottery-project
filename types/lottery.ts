@@ -36,6 +36,11 @@ export interface Raffle {
   executedAt?: Date;            // When raffle was executed
   createdAt: Date;
   updatedAt: Date;
+
+  // Prize/Platform split configuration
+  prizePercentage?: number;     // Percentage to winner(s) (e.g., 0.70 for 70%), defaults to 0.70
+  causeName?: string;           // Name of charitable cause (e.g., "Albergue San Francisco")
+  causeDescription?: string;    // Optional longer description of the cause
 }
 
 // ============================================

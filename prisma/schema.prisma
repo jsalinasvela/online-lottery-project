@@ -45,6 +45,11 @@ model Raffle {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
+  // Prize/Platform split configuration
+  prizePercentage  Float   @default(0.70) // 70% to winner(s) by default
+  causeName        String?                // e.g., "Albergue San Francisco"
+  causeDescription String?                // Optional longer description
+
   tickets      Ticket[]
   transactions PurchaseTransaction[]
   winner       Winner?
