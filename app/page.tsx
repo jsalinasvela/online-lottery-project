@@ -513,6 +513,57 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Prize Distribution Info */}
+            <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-slate-700">
+              <div className="bg-gradient-to-r from-yellow-600 to-orange-500 px-4 py-3 text-white">
+                <h3 className="text-sm font-bold">{t.home.prizeDistribution.title}</h3>
+              </div>
+              <div className="p-4 space-y-3">
+                {/* Prize Amount */}
+                <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg border border-slate-700">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🏆</span>
+                    <span className="text-sm text-slate-300">{t.home.prizeDistribution.prize}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-yellow-400">
+                      {formatCurrency(activeRaffle.currentAmount * (activeRaffle.prizePercentage ?? 0.70))}
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      {Math.round((activeRaffle.prizePercentage ?? 0.70) * 100)}% {t.home.prizeDistribution.ofPool}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Platform/Cause Amount */}
+                <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg border border-slate-700">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">💝</span>
+                    <div>
+                      <span className="text-sm text-slate-300">{t.home.prizeDistribution.causeAndOperations}</span>
+                      {activeRaffle.causeName && (
+                        <p className="text-xs text-purple-400">{activeRaffle.causeName}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-purple-400">
+                      {formatCurrency(activeRaffle.currentAmount * (1 - (activeRaffle.prizePercentage ?? 0.70)))}
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      {Math.round((1 - (activeRaffle.prizePercentage ?? 0.70)) * 100)}% {t.home.prizeDistribution.ofPool}
+                    </div>
+                  </div>
+                </div>
+
+                {activeRaffle.causeDescription && (
+                  <p className="text-xs text-slate-400 italic px-1">
+                    {activeRaffle.causeDescription}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </main>

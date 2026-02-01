@@ -86,6 +86,13 @@ export const translations = {
       },
     },
 
+    prizeDistribution: {
+      title: 'Distribución del Premio',
+      prize: 'Premio',
+      causeAndOperations: 'Causa solidaria y operación',
+      ofPool: 'del pozo',
+    },
+
     footer: {
       copyright: '© 2025 Sorteo en Línea. Todos los derechos reservados.',
       disclaimer: 'Juega responsablemente. Debes ser mayor de 18 años para participar.',
