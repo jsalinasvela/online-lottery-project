@@ -4,6 +4,7 @@ import {
   createTransaction,
   getTicketsByUserId,
   getTicketCount,
+  getAffiliateByCode,
 } from '@/lib/data/store';
 import { isValidQuantity } from '@/lib/utils/validation';
 
@@ -11,7 +12,7 @@ import { isValidQuantity } from '@/lib/utils/validation';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { raffleId, userId, quantity } = body;
+    const { raffleId, userId, quantity, affiliateCode } = body;
 
     // Validation
     if (!raffleId || !userId || !quantity) {
@@ -63,6 +64,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Validate affiliate code if provided
+    let validAffiliateCode: string | undefined;
+    if (affiliateCode) {
+      const affiliate = await getAffiliateByCode(affiliateCode);
+      if (affiliate && affiliate.active) {
+        validAffiliateCode = affiliateCode;
+      }
+      // Silently ignore invalid/inactive affiliate codes
+    }
+
     // Calculate totals
     const totalAmount = raffle.ticketPrice * quantity;
     const purchaseDate = new Date();
@@ -77,6 +88,7 @@ export async function POST(request: NextRequest) {
       totalAmount,
       transactionDate: purchaseDate,
       status: 'pending_payment' as const,
+      affiliateCode: validAffiliateCode,
     };
     const transaction = await createTransaction(transactionData);
 
