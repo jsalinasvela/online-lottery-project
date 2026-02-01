@@ -48,6 +48,10 @@ export async function createRaffle(raffle: Omit<Raffle, 'id' | 'createdAt' | 'up
       winningTicketNumber: raffle.winningTicketNumber,
       winnerName: raffle.winnerName,
       executedAt: raffle.executedAt,
+      // Prize/Platform split configuration
+      prizePercentage: raffle.prizePercentage ?? 0.70,
+      causeName: raffle.causeName || null,
+      causeDescription: raffle.causeDescription || null,
     },
   });
 
@@ -123,6 +127,10 @@ export async function updateRaffle(id: string, updates: Partial<Raffle>): Promis
     if (updates.winningTicketNumber !== undefined) updateData.winningTicketNumber = updates.winningTicketNumber;
     if (updates.winnerName !== undefined) updateData.winnerName = updates.winnerName;
     if (updates.executedAt !== undefined) updateData.executedAt = updates.executedAt;
+    // Prize/Platform split configuration
+    if (updates.prizePercentage !== undefined) updateData.prizePercentage = updates.prizePercentage;
+    if (updates.causeName !== undefined) updateData.causeName = updates.causeName;
+    if (updates.causeDescription !== undefined) updateData.causeDescription = updates.causeDescription;
 
     const updated = await prisma.raffle.update({
       where: { id },
@@ -557,6 +565,10 @@ function convertRaffleFromDb(dbRaffle: any): Raffle {
     executedAt: dbRaffle.executedAt,
     createdAt: dbRaffle.createdAt,
     updatedAt: dbRaffle.updatedAt,
+    // Prize/Platform split configuration
+    prizePercentage: dbRaffle.prizePercentage ?? 0.70,
+    causeName: dbRaffle.causeName || undefined,
+    causeDescription: dbRaffle.causeDescription || undefined,
   };
 }
 
