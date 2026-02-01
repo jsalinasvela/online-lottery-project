@@ -5,7 +5,8 @@ import { Ticket, PurchaseTransaction } from '@/types/lottery';
 export async function purchaseTickets(
   raffleId: string,
   userId: string,
-  quantity: number
+  quantity: number,
+  affiliateCode?: string
 ): Promise<PurchaseTransaction | null> {
   try {
     const response = await fetch('/api/tickets', {
@@ -13,7 +14,7 @@ export async function purchaseTickets(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ raffleId, userId, quantity }),
+      body: JSON.stringify({ raffleId, userId, quantity, affiliateCode }),
     });
 
     if (!response.ok) {

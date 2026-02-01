@@ -38,6 +38,12 @@ interface RaffleContextType {
 
 const RaffleContext = createContext<RaffleContextType | undefined>(undefined);
 
+// Helper to get affiliate code from localStorage
+function getAffiliateCode(): string | undefined {
+  if (typeof window === 'undefined') return undefined;
+  return localStorage.getItem('affiliate_code') || undefined;
+}
+
 export function RaffleProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -94,7 +100,8 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
         setPurchaseError(null);
 
         try {
-          const transaction = await apiPurchaseTickets(activeRaffle.id, userId, quantity);
+          const affiliateCode = getAffiliateCode();
+          const transaction = await apiPurchaseTickets(activeRaffle.id, userId, quantity, affiliateCode);
 
           if (!transaction) {
             throw new Error('No transaction returned');
@@ -137,7 +144,8 @@ export function RaffleProvider({ children }: { children: React.ReactNode }) {
       setPurchaseError(null);
 
       try {
-        const transaction = await apiPurchaseTickets(activeRaffle.id, userId, quantity);
+        const affiliateCode = getAffiliateCode();
+        const transaction = await apiPurchaseTickets(activeRaffle.id, userId, quantity, affiliateCode);
 
         if (!transaction) {
           throw new Error('No transaction returned');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GlassVisualization from '@/components/raffle/GlassVisualization';
 import WinnerBanner from '@/components/raffle/WinnerBanner';
 import { useRaffleContext } from '@/lib/context/RaffleContext';
@@ -77,6 +77,18 @@ export default function Home() {
 
   const { raffle: recentCompletedRaffle } = useRecentCompletedRaffle();
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+
+  // Capture affiliate code from URL and store in localStorage
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref');
+    if (refCode) {
+      localStorage.setItem('affiliate_code', refCode);
+      // Clean up URL without reload
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, []);
 
   const handlePurchase = async (quantity: number) => {
     setSelectedPackage(quantity);
