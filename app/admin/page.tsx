@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Raffle } from '@/types/lottery';
+import { formatCurrency } from '@/lib/utils/currency';
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -384,19 +385,19 @@ export default function AdminPage() {
                       <div>
                         <p className="text-xs text-slate-500 dark:text-slate-400">Ticket Price</p>
                         <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                          ${raffle.ticketPrice}
+                          {formatCurrency(raffle.ticketPrice)}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs text-slate-500 dark:text-slate-400">Goal</p>
                         <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                          ${raffle.goalAmount}
+                          {formatCurrency(raffle.goalAmount)}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs text-slate-500 dark:text-slate-400">Current</p>
                         <p className="text-lg font-semibold text-purple-600 dark:text-purple-400">
-                          ${raffle.currentAmount}
+                          {formatCurrency(raffle.currentAmount)}
                         </p>
                       </div>
                       <div>
@@ -423,7 +424,7 @@ export default function AdminPage() {
                           🎉 Winner: {raffle.winnerName || 'Anonymous'} | Ticket #{raffle.winningTicketNumber || raffle.winningTicketId}
                         </p>
                         <p className="text-xs text-yellow-800 dark:text-yellow-300 mt-1">
-                          Prize: ${raffle.currentAmount}
+                          Prize: {formatCurrency(raffle.currentAmount)}
                         </p>
                       </div>
                     )}

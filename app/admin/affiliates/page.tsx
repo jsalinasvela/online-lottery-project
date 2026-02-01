@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Affiliate, AffiliateEarning } from '@/types/lottery';
+import { formatCurrency } from '@/lib/utils/currency';
 
 export default function AffiliatesPage() {
   const { data: session, status } = useSession();
@@ -477,13 +478,13 @@ export default function AffiliatesPage() {
                 <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
                   <p className="text-xs text-slate-500 dark:text-slate-400">Total Sales</p>
                   <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                    ${earningsSummary.totalSales.toFixed(2)}
+                    {formatCurrency(earningsSummary.totalSales)}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
                   <p className="text-xs text-slate-500 dark:text-slate-400">Total Commission Owed</p>
                   <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                    ${earningsSummary.totalCommission.toFixed(2)}
+                    {formatCurrency(earningsSummary.totalCommission)}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
@@ -535,10 +536,10 @@ export default function AffiliatesPage() {
                             </td>
                             <td className="py-3 px-4 text-slate-600 dark:text-slate-400">{earning.raffleTitle}</td>
                             <td className="py-3 px-4 text-right text-slate-900 dark:text-slate-100">
-                              ${earning.totalSales.toFixed(2)}
+                              {formatCurrency(earning.totalSales)}
                             </td>
                             <td className="py-3 px-4 text-right font-semibold text-purple-600 dark:text-purple-400">
-                              ${earning.commission.toFixed(2)}
+                              {formatCurrency(earning.commission)}
                             </td>
                           </tr>
                         ))}
