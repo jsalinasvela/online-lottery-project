@@ -86,12 +86,17 @@ export async function POST(request: NextRequest) {
       executedAt,
     });
 
+    // Calculate prize/platform split
+    const prizePercentage = raffle.prizePercentage ?? 0.70;
+    const prizeAmount = raffle.currentAmount * prizePercentage;
+    const platformAmount = raffle.currentAmount * (1 - prizePercentage);
+
     // Create winner record (Prisma will generate the ID)
     const winnerData = {
       raffleId,
       userId: winningTicket.userId,
       ticketId: winningTicket.id,
-      prizeAmount: raffle.currentAmount,
+      prizeAmount, // Actual prize after split
       announcedAt: executedAt,
     };
     const winner = await createWinner(winnerData);
@@ -110,6 +115,14 @@ export async function POST(request: NextRequest) {
         ? { id: winnerUser.id, name: winnerUser.name, email: winnerUser.email }
         : null,
       raffle: updatedRaffle,
+      // Prize split info
+      prizeSplit: {
+        totalPool: raffle.currentAmount,
+        prizePercentage,
+        prizeAmount,
+        platformAmount,
+        causeName: raffle.causeName,
+      },
       message: `Winner selected! ${winnerUser?.name || 'User'} won with ticket #${winningTicket.ticketNumber}!`,
     });
   } catch (error) {
