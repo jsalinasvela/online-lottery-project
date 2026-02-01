@@ -9,14 +9,14 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
-  email         String    @unique
+  email         String   @unique
   passwordHash  String?
-  role          UserRole  @default(USER)
-  walletBalance Float     @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          UserRole @default(USER)
+  walletBalance Float    @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   tickets       Ticket[]
   transactions  PurchaseTransaction[]
@@ -45,9 +45,9 @@ model Raffle {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
-  tickets             Ticket[]
-  transactions        PurchaseTransaction[]
-  winner              Winner?
+  tickets      Ticket[]
+  transactions PurchaseTransaction[]
+  winner       Winner?
 
   @@index([status])
 }
@@ -61,51 +61,55 @@ model Ticket {
   purchaseDate   DateTime @default(now())
   isWinner       Boolean  @default(false)
 
-  raffle         Raffle   @relation(fields: [raffleId], references: [id], onDelete: Cascade)
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  winner         Winner?
+  raffle Raffle  @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  winner Winner?
 
   @@index([raffleId, userId])
   @@index([raffleId, ticketNumber])
 }
 
 model PurchaseTransaction {
-  id                String            @id @default(cuid())
-  userId            String
-  raffleId          String
-  ticketIds         String[]
-  quantity          Int
-  totalAmount       Float
-  transactionDate   DateTime          @default(now())
-  status            TransactionStatus @default(PENDING_PAYMENT)
+  id              String            @id @default(cuid())
+  userId          String
+  raffleId        String
+  ticketIds       String[]
+  quantity        Int
+  totalAmount     Float
+  transactionDate DateTime          @default(now())
+  status          TransactionStatus @default(PENDING_PAYMENT)
 
   // Yape payment verification fields
-  paymentProofUrl   String?           // Screenshot URL or path
-  paymentMethod     String            @default("yape")
-  adminNotes        String?           // Admin can add notes during review
-  reviewedAt        DateTime?
-  reviewedBy        String?           // Admin user ID who reviewed
+  paymentProofUrl String? // Screenshot URL or path
+  paymentMethod   String    @default("yape")
+  adminNotes      String? // Admin can add notes during review
+  reviewedAt      DateTime?
+  reviewedBy      String? // Admin user ID who reviewed
 
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  raffle            Raffle            @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  // Affiliate tracking
+  affiliateCode String? // Code of referring affiliate (if any)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  raffle Raffle @relation(fields: [raffleId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([raffleId])
   @@index([status])
+  @@index([affiliateCode])
 }
 
 model Winner {
-  id          String   @id @default(cuid())
-  raffleId    String   @unique
+  id          String    @id @default(cuid())
+  raffleId    String    @unique
   userId      String
-  ticketId    String   @unique
+  ticketId    String    @unique
   prizeAmount Float
-  announcedAt DateTime @default(now())
+  announcedAt DateTime  @default(now())
   claimedAt   DateTime?
 
-  raffle      Raffle   @relation(fields: [raffleId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  raffle Raffle @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 }
 
 model AuditLog {
@@ -119,6 +123,20 @@ model AuditLog {
   @@index([userId])
   @@index([action])
   @@index([createdAt])
+}
+
+model Affiliate {
+  id             String   @id @default(cuid())
+  code           String   @unique // Unique referral code (e.g., "JUAN2024")
+  name           String
+  email          String
+  commissionRate Float    @default(0.05) // 5% default commission
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([code])
+  @@index([active])
 }
 
 // NextAuth.js required models
@@ -165,11 +183,11 @@ enum RaffleStatus {
 }
 
 enum TransactionStatus {
-  PENDING_PAYMENT  // Waiting for user to send Yape screenshot
-  PENDING_REVIEW   // Screenshot submitted, waiting for admin review
-  COMPLETED        // Admin approved payment
-  REJECTED         // Admin rejected payment
-  FAILED           // Technical failure
+  PENDING_PAYMENT // Waiting for user to send Yape screenshot
+  PENDING_REVIEW // Screenshot submitted, waiting for admin review
+  COMPLETED // Admin approved payment
+  REJECTED // Admin rejected payment
+  FAILED // Technical failure
 }
 
 enum UserRole {
