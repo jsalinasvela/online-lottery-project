@@ -8,6 +8,8 @@ import type {
   User,
   PurchaseTransaction,
   Winner,
+  Affiliate,
+  AffiliateEarning,
 } from '@/types/lottery';
 
 // ============================================
@@ -274,6 +276,7 @@ export async function createTransaction(transaction: Omit<PurchaseTransaction, '
       transactionDate: transaction.transactionDate || new Date(),
       status: convertStatusToDb(transaction.status),
       paymentMethod: 'yape',
+      affiliateCode: transaction.affiliateCode || null,
     },
   });
 
@@ -339,6 +342,141 @@ export async function getWinnerByRaffleId(raffleId: string): Promise<Winner | un
   });
 
   return winner ? convertWinnerFromDb(winner) : undefined;
+}
+
+// ============================================
+// Affiliate Operations
+// ============================================
+
+export async function createAffiliate(affiliate: Omit<Affiliate, 'id' | 'createdAt' | 'updatedAt'>): Promise<Affiliate> {
+  const created = await prisma.affiliate.create({
+    data: {
+      code: affiliate.code,
+      name: affiliate.name,
+      email: affiliate.email,
+      commissionRate: affiliate.commissionRate ?? 0.05,
+      active: affiliate.active ?? true,
+    },
+  });
+
+  return convertAffiliateFromDb(created);
+}
+
+export async function getAffiliateById(id: string): Promise<Affiliate | undefined> {
+  const affiliate = await prisma.affiliate.findUnique({
+    where: { id },
+  });
+
+  return affiliate ? convertAffiliateFromDb(affiliate) : undefined;
+}
+
+export async function getAffiliateByCode(code: string): Promise<Affiliate | undefined> {
+  const affiliate = await prisma.affiliate.findUnique({
+    where: { code },
+  });
+
+  return affiliate ? convertAffiliateFromDb(affiliate) : undefined;
+}
+
+export async function getAllAffiliates(includeInactive = false): Promise<Affiliate[]> {
+  const affiliates = await prisma.affiliate.findMany({
+    where: includeInactive ? {} : { active: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return affiliates.map(convertAffiliateFromDb);
+}
+
+export async function updateAffiliate(id: string, updates: Partial<Affiliate>): Promise<Affiliate | undefined> {
+  try {
+    const updateData: any = { updatedAt: new Date() };
+
+    if (updates.code !== undefined) updateData.code = updates.code;
+    if (updates.name !== undefined) updateData.name = updates.name;
+    if (updates.email !== undefined) updateData.email = updates.email;
+    if (updates.commissionRate !== undefined) updateData.commissionRate = updates.commissionRate;
+    if (updates.active !== undefined) updateData.active = updates.active;
+
+    const updated = await prisma.affiliate.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return convertAffiliateFromDb(updated);
+  } catch (error) {
+    return undefined;
+  }
+}
+
+export async function deleteAffiliate(id: string): Promise<boolean> {
+  try {
+    // Soft delete by setting active to false
+    await prisma.affiliate.update({
+      where: { id },
+      data: { active: false, updatedAt: new Date() },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+export async function getAffiliateEarnings(raffleId?: string): Promise<AffiliateEarning[]> {
+  // Get all completed transactions with affiliate codes
+  const whereClause: any = {
+    status: 'COMPLETED',
+    affiliateCode: { not: null },
+  };
+
+  if (raffleId) {
+    whereClause.raffleId = raffleId;
+  }
+
+  const transactions = await prisma.purchaseTransaction.findMany({
+    where: whereClause,
+    include: {
+      raffle: {
+        select: { id: true, title: true, status: true },
+      },
+    },
+  });
+
+  // Only include transactions from completed raffles
+  const completedRaffleTransactions = transactions.filter(
+    (t: any) => t.raffle.status === 'COMPLETED'
+  );
+
+  // Get all affiliates for commission rates
+  const affiliates = await prisma.affiliate.findMany();
+  const affiliateMap = new Map(affiliates.map((a: any) => [a.code, a]));
+
+  // Group transactions by affiliate and raffle
+  const earningsMap = new Map<string, AffiliateEarning>();
+
+  for (const transaction of completedRaffleTransactions) {
+    const key = `${transaction.affiliateCode}-${transaction.raffleId}`;
+    const affiliate = affiliateMap.get(transaction.affiliateCode!);
+
+    if (!affiliate) continue;
+
+    const existing = earningsMap.get(key);
+    if (existing) {
+      existing.totalSales += transaction.totalAmount;
+      existing.commission = existing.totalSales * affiliate.commissionRate;
+    } else {
+      earningsMap.set(key, {
+        affiliateId: affiliate.id,
+        affiliateCode: affiliate.code,
+        affiliateName: affiliate.name,
+        raffleId: transaction.raffleId,
+        raffleTitle: (transaction as any).raffle.title,
+        totalSales: transaction.totalAmount,
+        commission: transaction.totalAmount * affiliate.commissionRate,
+      });
+    }
+  }
+
+  return Array.from(earningsMap.values());
 }
 
 // ============================================
@@ -455,6 +593,7 @@ function convertTransactionFromDb(dbTransaction: any): PurchaseTransaction {
     totalAmount: dbTransaction.totalAmount,
     transactionDate: dbTransaction.transactionDate,
     status: convertStatusFromDb(dbTransaction.status) as any,
+    affiliateCode: dbTransaction.affiliateCode || undefined,
   };
 }
 
@@ -467,6 +606,19 @@ function convertWinnerFromDb(dbWinner: any): Winner {
     prizeAmount: dbWinner.prizeAmount,
     announcedAt: dbWinner.announcedAt,
     claimedAt: dbWinner.claimedAt,
+  };
+}
+
+function convertAffiliateFromDb(dbAffiliate: any): Affiliate {
+  return {
+    id: dbAffiliate.id,
+    code: dbAffiliate.code,
+    name: dbAffiliate.name,
+    email: dbAffiliate.email,
+    commissionRate: dbAffiliate.commissionRate,
+    active: dbAffiliate.active,
+    createdAt: dbAffiliate.createdAt,
+    updatedAt: dbAffiliate.updatedAt,
   };
 }
 
