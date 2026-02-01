@@ -79,6 +79,9 @@ export interface PurchaseTransaction {
   adminNotes?: string;          // Admin can add notes during review
   reviewedAt?: Date;            // When admin reviewed
   reviewedBy?: string;          // Admin user ID who reviewed
+
+  // Affiliate tracking
+  affiliateCode?: string;       // Code of referring affiliate (if any)
 }
 
 // ============================================
@@ -93,4 +96,29 @@ export interface Winner {
   prizeAmount: number;
   announcedAt: Date;
   claimedAt?: Date;
+}
+
+// ============================================
+// Affiliate Types
+// ============================================
+
+export interface Affiliate {
+  id: string;
+  code: string;                 // Unique referral code (e.g., "JUAN2024")
+  name: string;
+  email: string;
+  commissionRate: number;       // Commission rate (e.g., 0.05 for 5%)
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AffiliateEarning {
+  affiliateId: string;
+  affiliateCode: string;
+  affiliateName: string;
+  raffleId: string;
+  raffleTitle: string;
+  totalSales: number;           // Sum of approved transaction amounts
+  commission: number;           // totalSales * commissionRate
 }
