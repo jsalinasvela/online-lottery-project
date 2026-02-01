@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { title, description, ticketPrice, goalAmount, maxTickets, endDate } = body;
+    const { title, description, ticketPrice, goalAmount, maxTickets, endDate, prizePercentage, causeName, causeDescription } = body;
 
     // Validation
     if (!title || !ticketPrice || !goalAmount) {
@@ -58,6 +58,19 @@ export async function POST(request: NextRequest) {
         { error: 'ticketPrice and goalAmount must be positive' },
         { status: 400 }
       );
+    }
+
+    // Validate prizePercentage if provided
+    let normalizedPrizePercentage = 0.70; // Default 70%
+    if (prizePercentage !== undefined) {
+      // Convert from 0-100 to 0-1 if needed
+      normalizedPrizePercentage = prizePercentage > 1 ? prizePercentage / 100 : prizePercentage;
+      if (normalizedPrizePercentage < 0 || normalizedPrizePercentage > 1) {
+        return NextResponse.json(
+          { error: 'prizePercentage must be between 0 and 100' },
+          { status: 400 }
+        );
+      }
     }
 
     // Check if there's an existing active raffle
@@ -80,6 +93,10 @@ export async function POST(request: NextRequest) {
       startDate: new Date(),
       endDate: endDate ? new Date(endDate) : undefined,
       status: 'active' as const,
+      // Prize/Platform split configuration
+      prizePercentage: normalizedPrizePercentage,
+      causeName: causeName || undefined,
+      causeDescription: causeDescription || undefined,
     };
 
     const raffle = await createRaffle(newRaffle);
