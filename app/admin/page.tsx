@@ -75,7 +75,10 @@ export default function AdminPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create raffle');
+        const errorMsg = errorData.details
+          ? `${errorData.error}: ${errorData.details}`
+          : errorData.error || 'Failed to create raffle';
+        throw new Error(errorMsg);
       }
 
       setSuccessMessage('Raffle created successfully!');

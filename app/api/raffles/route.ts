@@ -104,8 +104,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ raffle, success: true }, { status: 201 });
   } catch (error) {
     console.error('Error creating raffle:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to create raffle' },
+      { error: 'Failed to create raffle', details: errorMessage },
       { status: 500 }
     );
   }
