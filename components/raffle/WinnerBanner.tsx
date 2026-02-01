@@ -98,7 +98,7 @@ export default function WinnerBanner({ raffle }: WinnerBannerProps) {
               {t.winner.recentWinner} <span className="text-yellow-700 dark:text-yellow-400">{raffle.winnerName || 'Anonymous'}</span>
             </p>
             <p className="text-xs text-slate-600 dark:text-slate-400">
-              {t.winner.won} <span className="font-bold text-yellow-700 dark:text-yellow-500">{formatCurrency(raffle.currentAmount)}</span> {t.winner.with} #{raffle.winningTicketNumber} • {raffle.title}
+              {t.winner.won} <span className="font-bold text-yellow-700 dark:text-yellow-500">{formatCurrency(raffle.currentAmount * (raffle.prizePercentage ?? 0.70))}</span> {t.winner.with} #{raffle.winningTicketNumber} • {raffle.title}
             </p>
           </div>
         </div>
