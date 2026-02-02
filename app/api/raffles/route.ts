@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { title, description, ticketPrice, goalAmount, maxTickets, endDate, prizePercentage, causeName, causeDescription } = body;
+    const { title, description, ticketPrice, goalAmount, maxTickets, endDate, prizePercentage, causeName, causeDescription, winnerCount } = body;
 
     // Validation
     if (!title || !ticketPrice || !goalAmount) {
@@ -73,6 +73,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Validate winnerCount if provided
+    let validatedWinnerCount = 1; // Default 1 winner
+    if (winnerCount !== undefined) {
+      validatedWinnerCount = parseInt(winnerCount, 10);
+      if (isNaN(validatedWinnerCount) || validatedWinnerCount < 1) {
+        return NextResponse.json(
+          { error: 'winnerCount must be a positive integer (minimum 1)' },
+          { status: 400 }
+        );
+      }
+    }
+
     // Check if there's an existing active raffle
     const existingActiveRaffle = await getActiveRaffle();
     if (existingActiveRaffle) {
@@ -97,6 +109,8 @@ export async function POST(request: NextRequest) {
       prizePercentage: normalizedPrizePercentage,
       causeName: causeName || undefined,
       causeDescription: causeDescription || undefined,
+      // Multiple winners configuration
+      winnerCount: validatedWinnerCount,
     };
 
     const raffle = await createRaffle(newRaffle);
