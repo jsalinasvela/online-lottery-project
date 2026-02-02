@@ -8,8 +8,9 @@ import {
   getUserById,
 } from '@/lib/data/store';
 import { requireAdmin, isErrorResponse } from '@/lib/auth/middleware';
+import { Ticket, Winner } from '@/types/lottery';
 
-// POST /api/execute-raffle - Execute raffle and select winner
+// POST /api/execute-raffle - Execute raffle and select winner(s)
 export async function POST(request: NextRequest) {
   // Require admin authentication
   const sessionOrError = await requireAdmin();
@@ -47,7 +48,10 @@ export async function POST(request: NextRequest) {
     // Get all tickets for this raffle
     const tickets = await getTicketsByRaffleId(raffleId);
 
-    // Validate at least one ticket sold
+    // Get winner count (default 1 for backwards compatibility)
+    const winnerCount = raffle.winnerCount ?? 1;
+
+    // Validate enough tickets sold for the number of winners
     if (tickets.length === 0) {
       return NextResponse.json(
         { error: 'Cannot execute raffle with no tickets sold' },
@@ -55,76 +59,108 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Winner Selection Algorithm
-    // Generate random number between 1 and total tickets (inclusive)
-    const winningNumber = Math.floor(Math.random() * tickets.length) + 1;
-
-    // Find ticket with that sequential number
-    const winningTicket = tickets.find((t) => t.ticketNumber === winningNumber);
-
-    if (!winningTicket) {
+    if (tickets.length < winnerCount) {
       return NextResponse.json(
-        { error: 'Failed to select winning ticket' },
-        { status: 500 }
+        { error: `Not enough tickets sold. Need at least ${winnerCount} tickets to select ${winnerCount} winner(s), but only ${tickets.length} sold.` },
+        { status: 400 }
       );
     }
 
-    // Mark ticket as winner
-    await updateTicket(winningTicket.id, { isWinner: true });
-
-    // Get winner user info
-    const winnerUser = await getUserById(winningTicket.userId);
-
-    // Update raffle status
-    const executedAt = new Date();
-    await updateRaffle(raffleId, {
-      status: 'completed',
-      winnerId: winningTicket.userId,
-      winningTicketId: winningTicket.id,
-      winningTicketNumber: winningTicket.ticketNumber,
-      winnerName: winnerUser?.name || 'Anonymous',
-      executedAt,
-    });
-
     // Calculate prize/platform split
     const prizePercentage = raffle.prizePercentage ?? 0.70;
-    const prizeAmount = raffle.currentAmount * prizePercentage;
+    const totalPrizeAmount = raffle.currentAmount * prizePercentage;
     const platformAmount = raffle.currentAmount * (1 - prizePercentage);
+    const prizePerWinner = totalPrizeAmount / winnerCount;
 
-    // Create winner record (Prisma will generate the ID)
-    const winnerData = {
-      raffleId,
-      userId: winningTicket.userId,
-      ticketId: winningTicket.id,
-      prizeAmount, // Actual prize after split
-      announcedAt: executedAt,
-      position: 1, // First (and currently only) winner
-    };
-    const winner = await createWinner(winnerData);
+    // Winner Selection Algorithm - Select N unique winning tickets
+    const selectedTickets: Ticket[] = [];
+    const availableTickets = [...tickets];
+
+    for (let i = 0; i < winnerCount; i++) {
+      const randomIndex = Math.floor(Math.random() * availableTickets.length);
+      const winningTicket = availableTickets.splice(randomIndex, 1)[0];
+      selectedTickets.push(winningTicket);
+    }
+
+    // Process each winner
+    const executedAt = new Date();
+    const winners: Winner[] = [];
+    const winnerUsers: { id: string; name: string; email: string; position: number }[] = [];
+
+    for (let i = 0; i < selectedTickets.length; i++) {
+      const winningTicket = selectedTickets[i];
+      const position = i + 1;
+
+      // Mark ticket as winner
+      await updateTicket(winningTicket.id, { isWinner: true });
+
+      // Get winner user info
+      const winnerUser = await getUserById(winningTicket.userId);
+
+      // Create winner record
+      const winnerData = {
+        raffleId,
+        userId: winningTicket.userId,
+        ticketId: winningTicket.id,
+        prizeAmount: prizePerWinner,
+        announcedAt: executedAt,
+        position,
+      };
+      const winner = await createWinner(winnerData);
+      winners.push(winner);
+
+      if (winnerUser) {
+        winnerUsers.push({
+          id: winnerUser.id,
+          name: winnerUser.name,
+          email: winnerUser.email,
+          position,
+        });
+      }
+    }
+
+    // Update raffle status (store first winner's info for backwards compatibility)
+    const firstWinningTicket = selectedTickets[0];
+    const firstWinnerUser = winnerUsers.find(u => u.position === 1);
+    await updateRaffle(raffleId, {
+      status: 'completed',
+      winnerId: firstWinningTicket.userId,
+      winningTicketId: firstWinningTicket.id,
+      winningTicketNumber: firstWinningTicket.ticketNumber,
+      winnerName: firstWinnerUser?.name || 'Anonymous',
+      executedAt,
+    });
 
     // Get updated raffle
     const updatedRaffle = await getRaffleById(raffleId);
 
+    // Build response message
+    const winnerNames = winnerUsers.map(u => u.name).join(', ');
+    const message = winnerCount === 1
+      ? `Winner selected! ${winnerNames} won with ticket #${firstWinningTicket.ticketNumber}!`
+      : `${winnerCount} winners selected! ${winnerNames}`;
+
     return NextResponse.json({
       success: true,
-      winner,
-      winningTicket: {
-        ...winningTicket,
-        isWinner: true,
-      },
-      winnerUser: winnerUser
-        ? { id: winnerUser.id, name: winnerUser.name, email: winnerUser.email }
-        : null,
+      winners,
+      winningTickets: selectedTickets.map(t => ({ ...t, isWinner: true })),
+      winnerUsers,
       raffle: updatedRaffle,
       // Prize split info
       prizeSplit: {
         totalPool: raffle.currentAmount,
         prizePercentage,
-        prizeAmount,
+        totalPrizeAmount,
+        prizePerWinner,
         platformAmount,
+        winnerCount,
         causeName: raffle.causeName,
       },
-      message: `Winner selected! ${winnerUser?.name || 'User'} won with ticket #${winningTicket.ticketNumber}!`,
+      message,
+      // Backwards compatibility - single winner fields
+      winner: winners[0],
+      winningTicket: { ...selectedTickets[0], isWinner: true },
+      winnerUser: winnerUsers[0] || null,
     });
   } catch (error) {
     console.error('Error executing raffle:', error);
