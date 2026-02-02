@@ -37,6 +37,7 @@ export default function AdminPage() {
     prizePercentage: 70,
     causeName: '',
     causeDescription: '',
+    winnerCount: 1,
   });
 
   const fetchRaffles = async () => {
@@ -93,6 +94,7 @@ export default function AdminPage() {
         prizePercentage: 70,
         causeName: '',
         causeDescription: '',
+        winnerCount: 1,
       });
       await fetchRaffles();
     } catch (err) {
@@ -382,6 +384,32 @@ export default function AdminPage() {
                     rows={2}
                     placeholder="Describe the charitable cause..."
                   />
+                </div>
+              </div>
+
+              {/* Winners Configuration Section */}
+              <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
+                <h4 className="text-md font-semibold text-slate-900 dark:text-slate-100 mb-4">
+                  Winners Configuration
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Number of Winners
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={formData.winnerCount}
+                      onChange={(e) =>
+                        setFormData({ ...formData, winnerCount: parseInt(e.target.value) || 1 })
+                      }
+                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                    />
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                      Prize will be split equally among winners
+                    </p>
+                  </div>
                 </div>
               </div>
 
