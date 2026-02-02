@@ -1,10 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Raffle } from '@/types/lottery';
+import { Raffle, Winner } from '@/types/lottery';
 import { formatCurrency } from '@/lib/utils/currency';
+
+interface EnrichedWinner extends Winner {
+  userName: string;
+}
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -14,6 +18,7 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [executing, setExecuting] = useState<string | null>(null);
+  const [raffleWinners, setRaffleWinners] = useState<Record<string, EnrichedWinner[]>>({});
 
   // Redirect if not authenticated or not admin
   useEffect(() => {
@@ -40,13 +45,30 @@ export default function AdminPage() {
     winnerCount: 1,
   });
 
+  const fetchWinnersForRaffle = useCallback(async (raffleId: string) => {
+    try {
+      const response = await fetch(`/api/raffles/${raffleId}/winners`);
+      if (!response.ok) return;
+      const data = await response.json();
+      setRaffleWinners(prev => ({ ...prev, [raffleId]: data.winners || [] }));
+    } catch (err) {
+      console.error('Error fetching winners:', err);
+    }
+  }, []);
+
   const fetchRaffles = async () => {
     try {
       const response = await fetch('/api/raffles');
       if (!response.ok) throw new Error('Failed to fetch raffles');
       const data = await response.json();
-      setRaffles(data.raffles || []);
+      const fetchedRaffles = data.raffles || [];
+      setRaffles(fetchedRaffles);
       setError(null);
+
+      // Fetch winners for completed raffles with multiple winners
+      fetchedRaffles
+        .filter((r: Raffle) => r.status === 'completed' && (r.winnerCount ?? 1) > 1)
+        .forEach((r: Raffle) => fetchWinnersForRaffle(r.id));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch raffles');
     } finally {
@@ -471,7 +493,7 @@ export default function AdminPage() {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-4">
                       <div>
                         <p className="text-xs text-slate-500 dark:text-slate-400">Ticket Price</p>
                         <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
@@ -496,6 +518,12 @@ export default function AdminPage() {
                           {raffle.ticketsSold}
                         </p>
                       </div>
+                      <div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Winners</p>
+                        <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                          {raffle.winnerCount ?? 1}
+                        </p>
+                      </div>
                     </div>
 
                     {raffle.status === 'active' && (
@@ -510,12 +538,40 @@ export default function AdminPage() {
 
                     {raffle.status === 'completed' && raffle.winnerId && (
                       <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                        <p className="text-sm font-medium text-yellow-900 dark:text-yellow-200">
-                          🎉 Winner: {raffle.winnerName || 'Anonymous'} | Ticket #{raffle.winningTicketNumber || raffle.winningTicketId}
-                        </p>
-                        <p className="text-xs text-yellow-800 dark:text-yellow-300 mt-1">
-                          Prize: {formatCurrency(raffle.currentAmount)}
-                        </p>
+                        {(raffle.winnerCount ?? 1) === 1 ? (
+                          // Single winner display
+                          <>
+                            <p className="text-sm font-medium text-yellow-900 dark:text-yellow-200">
+                              🎉 Winner: {raffle.winnerName || 'Anonymous'} | Ticket #{raffle.winningTicketNumber || raffle.winningTicketId}
+                            </p>
+                            <p className="text-xs text-yellow-800 dark:text-yellow-300 mt-1">
+                              Prize: {formatCurrency(raffle.currentAmount * (raffle.prizePercentage ?? 0.70))}
+                            </p>
+                          </>
+                        ) : (
+                          // Multiple winners display
+                          <>
+                            <p className="text-sm font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+                              🎉 {raffle.winnerCount} Winners
+                            </p>
+                            {raffleWinners[raffle.id] ? (
+                              <div className="space-y-1">
+                                {raffleWinners[raffle.id].map((winner, index) => (
+                                  <p key={winner.id} className="text-xs text-yellow-800 dark:text-yellow-300">
+                                    {index + 1}. {winner.userName} - {formatCurrency(winner.prizeAmount)}
+                                  </p>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-yellow-800 dark:text-yellow-300">
+                                Loading winners...
+                              </p>
+                            )}
+                            <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-2">
+                              Total Prize: {formatCurrency(raffle.currentAmount * (raffle.prizePercentage ?? 0.70))} ({formatCurrency((raffle.currentAmount * (raffle.prizePercentage ?? 0.70)) / (raffle.winnerCount ?? 1))} per winner)
+                            </p>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
