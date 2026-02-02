@@ -91,6 +91,8 @@ export const translations = {
       prize: 'Premio',
       causeAndOperations: 'Causa solidaria y operación',
       ofPool: 'del pozo',
+      winners: 'ganadores',
+      perWinner: 'por ganador',
     },
 
     footer: {

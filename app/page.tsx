@@ -524,15 +524,28 @@ export default function Home() {
                 <div className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg border border-slate-700">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🏆</span>
-                    <span className="text-sm text-slate-300">{t.home.prizeDistribution.prize}</span>
+                    <div>
+                      <span className="text-sm text-slate-300">{t.home.prizeDistribution.prize}</span>
+                      {(activeRaffle.winnerCount ?? 1) > 1 && (
+                        <p className="text-xs text-yellow-400">
+                          {activeRaffle.winnerCount} {t.home.prizeDistribution.winners}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-yellow-400">
                       {formatCurrency(activeRaffle.currentAmount * (activeRaffle.prizePercentage ?? 0.70))}
                     </div>
-                    <div className="text-xs text-slate-400">
-                      {Math.round((activeRaffle.prizePercentage ?? 0.70) * 100)}% {t.home.prizeDistribution.ofPool}
-                    </div>
+                    {(activeRaffle.winnerCount ?? 1) > 1 ? (
+                      <div className="text-xs text-slate-400">
+                        {formatCurrency((activeRaffle.currentAmount * (activeRaffle.prizePercentage ?? 0.70)) / (activeRaffle.winnerCount ?? 1))} {t.home.prizeDistribution.perWinner}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-slate-400">
+                        {Math.round((activeRaffle.prizePercentage ?? 0.70) * 100)}% {t.home.prizeDistribution.ofPool}
+                      </div>
+                    )}
                   </div>
                 </div>
 
