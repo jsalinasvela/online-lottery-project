@@ -52,6 +52,8 @@ export async function createRaffle(raffle: Omit<Raffle, 'id' | 'createdAt' | 'up
       prizePercentage: raffle.prizePercentage ?? 0.70,
       causeName: raffle.causeName || null,
       causeDescription: raffle.causeDescription || null,
+      // Multiple winners configuration
+      winnerCount: raffle.winnerCount ?? 1,
     },
   });
 
@@ -131,6 +133,8 @@ export async function updateRaffle(id: string, updates: Partial<Raffle>): Promis
     if (updates.prizePercentage !== undefined) updateData.prizePercentage = updates.prizePercentage;
     if (updates.causeName !== undefined) updateData.causeName = updates.causeName;
     if (updates.causeDescription !== undefined) updateData.causeDescription = updates.causeDescription;
+    // Multiple winners configuration
+    if (updates.winnerCount !== undefined) updateData.winnerCount = updates.winnerCount;
 
     const updated = await prisma.raffle.update({
       where: { id },
@@ -330,6 +334,7 @@ export async function createWinner(winner: Omit<Winner, 'id'>): Promise<Winner> 
       prizeAmount: winner.prizeAmount,
       announcedAt: winner.announcedAt || new Date(),
       claimedAt: winner.claimedAt,
+      position: winner.position ?? 1,
     },
   });
 
@@ -345,11 +350,23 @@ export async function getWinnerById(id: string): Promise<Winner | undefined> {
 }
 
 export async function getWinnerByRaffleId(raffleId: string): Promise<Winner | undefined> {
-  const winner = await prisma.winner.findUnique({
+  // Returns the first winner (position 1) for backwards compatibility
+  const winner = await prisma.winner.findFirst({
     where: { raffleId },
+    orderBy: { position: 'asc' },
   });
 
   return winner ? convertWinnerFromDb(winner) : undefined;
+}
+
+export async function getWinnersByRaffleId(raffleId: string): Promise<Winner[]> {
+  // Returns all winners for a raffle, ordered by position
+  const winners = await prisma.winner.findMany({
+    where: { raffleId },
+    orderBy: { position: 'asc' },
+  });
+
+  return winners.map(convertWinnerFromDb);
 }
 
 // ============================================
@@ -569,6 +586,8 @@ function convertRaffleFromDb(dbRaffle: any): Raffle {
     prizePercentage: dbRaffle.prizePercentage ?? 0.70,
     causeName: dbRaffle.causeName || undefined,
     causeDescription: dbRaffle.causeDescription || undefined,
+    // Multiple winners configuration
+    winnerCount: dbRaffle.winnerCount ?? 1,
   };
 }
 
@@ -618,6 +637,7 @@ function convertWinnerFromDb(dbWinner: any): Winner {
     prizeAmount: dbWinner.prizeAmount,
     announcedAt: dbWinner.announcedAt,
     claimedAt: dbWinner.claimedAt,
+    position: dbWinner.position ?? 1,
   };
 }
 

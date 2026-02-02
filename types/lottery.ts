@@ -41,6 +41,9 @@ export interface Raffle {
   prizePercentage?: number;     // Percentage to winner(s) (e.g., 0.70 for 70%), defaults to 0.70
   causeName?: string;           // Name of charitable cause (e.g., "Albergue San Francisco")
   causeDescription?: string;    // Optional longer description of the cause
+
+  // Multiple winners configuration
+  winnerCount?: number;         // Number of winners to select (defaults to 1)
 }
 
 // ============================================
@@ -101,6 +104,7 @@ export interface Winner {
   prizeAmount: number;
   announcedAt: Date;
   claimedAt?: Date;
+  position: number;             // 1st winner, 2nd winner, etc.
 }
 
 // ============================================

@@ -50,9 +50,12 @@ model Raffle {
   causeName        String?                // e.g., "Albergue San Francisco"
   causeDescription String?                // Optional longer description
 
+  // Multiple winners configuration
+  winnerCount      Int     @default(1)    // Number of winners to select
+
   tickets      Ticket[]
   transactions PurchaseTransaction[]
-  winner       Winner?
+  winners      Winner[]                   // Changed from Winner? to Winner[]
 
   @@index([status])
 }
@@ -105,16 +108,19 @@ model PurchaseTransaction {
 
 model Winner {
   id          String    @id @default(cuid())
-  raffleId    String    @unique
+  raffleId    String                        // Removed @unique to allow multiple winners
   userId      String
   ticketId    String    @unique
   prizeAmount Float
   announcedAt DateTime  @default(now())
   claimedAt   DateTime?
+  position    Int       @default(1)         // 1st winner, 2nd winner, etc.
 
   raffle Raffle @relation(fields: [raffleId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([raffleId])
 }
 
 model AuditLog {

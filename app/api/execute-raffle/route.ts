@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
       ticketId: winningTicket.id,
       prizeAmount, // Actual prize after split
       announcedAt: executedAt,
+      position: 1, // First (and currently only) winner
     };
     const winner = await createWinner(winnerData);
 
