@@ -106,9 +106,11 @@ export const translations = {
   // Winner Banner
   winner: {
     recentWinner: 'Ganador Reciente:',
-    won: 'Ganó',
-    with: 'con el boleto',
+    recentWinners: 'Ganadores Recientes',
+    won: 'ganó',
+    with: 'con boleto',
     raffleName: 'Sorteo',
+    perWinner: 'por ganador',
   },
 
   // Glass Visualization
