@@ -161,11 +161,9 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-purple-500/20 dark:border-purple-500/10 bg-purple-900/30 dark:bg-purple-950/30 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">
-            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
-              {t.home.title}
-            </span>
-          </h1>
+          <div className="flex justify-center mb-2">
+            <img src="/logo.svg" alt="ElZorrón" className="h-16 sm:h-20" />
+          </div>
           <p className="text-sm sm:text-base text-slate-200 dark:text-slate-300">
             {t.home.subtitle}
           </p>

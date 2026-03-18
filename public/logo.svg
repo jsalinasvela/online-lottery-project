@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 110" width="370" height="110">
+
+  <!-- Fox Icon Badge -->
+  <rect x="0" y="5" width="100" height="100" rx="18" fill="#3B0764"/>
+
+  <!-- Fox ears -->
+  <polygon points="18,62 8,16 48,52" fill="#EA580C"/>
+  <polygon points="82,62 92,16 52,52" fill="#EA580C"/>
+  <!-- Inner ears -->
+  <polygon points="22,57 14,28 44,49" fill="#FED7AA"/>
+  <polygon points="78,57 86,28 56,49" fill="#FED7AA"/>
+
+  <!-- Fox face -->
+  <ellipse cx="50" cy="68" rx="34" ry="30" fill="#EA580C"/>
+
+  <!-- Forehead lighter patch -->
+  <ellipse cx="50" cy="56" rx="14" ry="9" fill="#FED7AA"/>
+
+  <!-- Left eye -->
+  <circle cx="37" cy="65" r="6.5" fill="white"/>
+  <circle cx="38" cy="66" r="3.5" fill="#1E1B4B"/>
+  <circle cx="39.5" cy="64.5" r="1.2" fill="white"/>
+
+  <!-- Right eye -->
+  <circle cx="63" cy="65" r="6.5" fill="white"/>
+  <circle cx="64" cy="66" r="3.5" fill="#1E1B4B"/>
+  <circle cx="65.5" cy="64.5" r="1.2" fill="white"/>
+
+  <!-- Muzzle -->
+  <ellipse cx="50" cy="77" rx="12" ry="8" fill="#FED7AA"/>
+  <!-- Nose -->
+  <ellipse cx="50" cy="72" rx="4.5" ry="3" fill="#1E1B4B"/>
+  <!-- Smile -->
+  <path d="M46 78 Q50 83 54 78" stroke="#1E1B4B" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Lucky star (top right of badge) -->
+  <path d="M83,20 L85.5,12 L88,20 L96,20 L90,24.5 L92.5,32 L85.5,27.5 L78.5,32 L81,24.5 L75,20 Z" fill="#FCD34D"/>
+
+  <!-- Ticket strip at bottom of badge -->
+  <rect x="20" y="90" width="60" height="10" rx="3" fill="#6D28D9" opacity="0.7"/>
+  <line x1="35" y1="90" x2="35" y2="100" stroke="#FCD34D" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="65" y1="90" x2="65" y2="100" stroke="#FCD34D" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <circle cx="20" cy="95" r="5" fill="#3B0764"/>
+  <circle cx="80" cy="95" r="5" fill="#3B0764"/>
+
+  <!-- Text: EL -->
+  <text
+    x="118" y="52"
+    font-family="'Arial Black', 'Helvetica Neue', Impact, sans-serif"
+    font-size="22"
+    font-weight="900"
+    fill="#E9D5FF"
+    letter-spacing="6">EL</text>
+
+  <!-- Text: ZORRÓN -->
+  <text
+    x="116" y="98"
+    font-family="'Arial Black', 'Helvetica Neue', Impact, sans-serif"
+    font-size="46"
+    font-weight="900"
+    fill="#FFFFFF"
+    letter-spacing="-0.5">ZORRÓN</text>
+
+  <!-- .pe accent -->
+  <text
+    x="322" y="98"
+    font-family="'Arial', sans-serif"
+    font-size="20"
+    font-weight="700"
+    fill="#FB923C">.pe</text>
+
+</svg>
